@@ -1,0 +1,8 @@
+[
+  {"id":"browser","name":"System Browser","source":"apps/browser/main.ts"},
+  {"id":"inference","name":"Local GGUF Inference Service","source":"apps/inference/main.ts"},
+  {"id":"fly","name":"Fly Embodied Autonomy","source":"apps/fly/main.ts"},
+  {"id":"rtsp","name":"Packet-owned RTSP controller","source":"apps/rtsp/main.ts"},
+  {"id":"vision","name":"Dual-box WHEP Vision","source":"apps/vision/main.ts"},
+  {"id":"media","name":"Internet Media & Telemetry Dashboard","source":"apps/media/main.ts"}
+]

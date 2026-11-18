@@ -1,0 +1,2154 @@
+[
+  {
+    "name": "now_ms",
+    "local": "now_ms",
+    "declaration": "@external(\"host\", \"now_ms\") declare function now_ms(): f64;",
+    "category": "System",
+    "semantics": "Monotonic high-resolution milliseconds.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "epoch_ms",
+    "local": "epoch_ms",
+    "declaration": "@external(\"host\", \"epoch_ms\") declare function epoch_ms(): f64;",
+    "category": "System",
+    "semantics": "Unix epoch milliseconds.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "random_f64",
+    "local": "random_f64",
+    "declaration": "@external(\"host\", \"random_f64\") declare function random_f64(): f64;",
+    "category": "System",
+    "semantics": "Uniform pseudo-random f64 in [0,1).",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "random_u32",
+    "local": "random_u32",
+    "declaration": "@external(\"host\", \"random_u32\") declare function random_u32(): i32;",
+    "category": "System",
+    "semantics": "Pseudo-random 32-bit value.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "get_view_width",
+    "local": "host_get_view_width",
+    "declaration": "@external(\"host\", \"get_view_width\") declare function host_get_view_width(): i32;",
+    "category": "System",
+    "semantics": "Current runtime viewport width.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "get_view_height",
+    "local": "host_get_view_height",
+    "declaration": "@external(\"host\", \"get_view_height\") declare function host_get_view_height(): i32;",
+    "category": "System",
+    "semantics": "Current runtime viewport height.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "get_dpr",
+    "local": "host_get_dpr",
+    "declaration": "@external(\"host\", \"get_dpr\") declare function host_get_dpr(): f64;",
+    "category": "System",
+    "semantics": "Current device pixel ratio.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "request_redraw",
+    "local": "request_redraw",
+    "declaration": "@external(\"host\", \"request_redraw\") declare function request_redraw(): void;",
+    "category": "System",
+    "semantics": "Marks the runtime framebuffer dirty for redraw.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "set_cursor",
+    "local": "host_set_cursor",
+    "declaration": "@external(\"host\", \"set_cursor\") declare function host_set_cursor(cursorId:i32): void;",
+    "category": "System",
+    "semantics": "Select host cursor by stable numeric id.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "log_utf8",
+    "local": "log_utf8",
+    "declaration": "@external(\"host\", \"log_utf8\") declare function log_utf8(ptr:usize, len:i32): void;",
+    "category": "Logging",
+    "semantics": "Writes UTF-8 text to the host runtime console.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "log_i32",
+    "local": "host_log_i32",
+    "declaration": "@external(\"host\", \"log_i32\") declare function host_log_i32(value:i32): void;",
+    "category": "Logging",
+    "semantics": "Writes one integer to the host runtime console.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "log_f64",
+    "local": "host_log_f64",
+    "declaration": "@external(\"host\", \"log_f64\") declare function host_log_f64(value:f64): void;",
+    "category": "Logging",
+    "semantics": "Writes one floating-point value to the host runtime console.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "set_window_title",
+    "local": "host_set_window_title",
+    "declaration": "@external(\"host\", \"set_window_title\") declare function host_set_window_title(ptr:usize, len:i32): void;",
+    "category": "System",
+    "semantics": "Changes the running app window title.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "storage_set",
+    "local": "host_storage_set",
+    "declaration": "@external(\"host\", \"storage_set\") declare function host_storage_set(keyPtr:usize,keyLen:i32,valuePtr:usize,valueLen:i32): i32;",
+    "category": "Storage",
+    "semantics": "Global persistent key/value storage shared through the host.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "storage_get",
+    "local": "host_storage_get",
+    "declaration": "@external(\"host\", \"storage_get\") declare function host_storage_get(keyPtr:usize,keyLen:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Storage",
+    "semantics": "Reads a global persistent value into WASM memory.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "storage_size",
+    "local": "host_storage_size",
+    "declaration": "@external(\"host\", \"storage_size\") declare function host_storage_size(keyPtr:usize,keyLen:i32): i32;",
+    "category": "Storage",
+    "semantics": "Returns stored value byte size or negative on error.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "storage_delete",
+    "local": "host_storage_delete",
+    "declaration": "@external(\"host\", \"storage_delete\") declare function host_storage_delete(keyPtr:usize,keyLen:i32): i32;",
+    "category": "Storage",
+    "semantics": "Deletes a global persistent value.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "fs_mkdir",
+    "local": "host_fs_mkdir",
+    "declaration": "@external(\"host\", \"fs_mkdir\") declare function host_fs_mkdir(pathPtr:usize,pathLen:i32): i32;",
+    "category": "VFS",
+    "semantics": "Creates a shared virtual directory.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "fs_write",
+    "local": "host_vfs_write",
+    "declaration": "@external(\"host\", \"fs_write\") declare function host_vfs_write(pathPtr:usize,pathLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "VFS",
+    "semantics": "Writes/replaces a shared virtual file.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "fs_read",
+    "local": "host_vfs_read",
+    "declaration": "@external(\"host\", \"fs_read\") declare function host_vfs_read(pathPtr:usize,pathLen:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "VFS",
+    "semantics": "Synchronously reads from the host shared in-memory VFS.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "fs_size",
+    "local": "host_vfs_size",
+    "declaration": "@external(\"host\", \"fs_size\") declare function host_vfs_size(pathPtr:usize,pathLen:i32): i32;",
+    "category": "VFS",
+    "semantics": "Returns virtual file byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "fs_exists",
+    "local": "host_vfs_exists",
+    "declaration": "@external(\"host\", \"fs_exists\") declare function host_vfs_exists(pathPtr:usize,pathLen:i32): i32;",
+    "category": "VFS",
+    "semantics": "Tests virtual path existence.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "fs_delete",
+    "local": "host_vfs_delete",
+    "declaration": "@external(\"host\", \"fs_delete\") declare function host_vfs_delete(pathPtr:usize,pathLen:i32): i32;",
+    "category": "VFS",
+    "semantics": "Deletes virtual path.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "fs_rename",
+    "local": "host_vfs_rename",
+    "declaration": "@external(\"host\", \"fs_rename\") declare function host_vfs_rename(oldPtr:usize,oldLen:i32,newPtr:usize,newLen:i32): i32;",
+    "category": "VFS",
+    "semantics": "Renames virtual path.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "host_fs_mount_picker",
+    "local": "host_fs_mount_picker",
+    "declaration": "@external(\"host\", \"host_fs_mount_picker\") declare function host_fs_mount_picker(): i32;",
+    "category": "Physical Files",
+    "semantics": "Opens a directory picker. Completion callback: hostFsMounted(success).",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "host_fs_read",
+    "local": "host_fs_read",
+    "declaration": "@external(\"host\", \"host_fs_read\") declare function host_fs_read(pathPtr:usize,pathLen:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Physical Files",
+    "semantics": "LEGACY asynchronous whole-file read. Return means request accepted, not bytes ready. Completion callback: hostFsReadDone(bytes) / hostFsReadDoneEx(opId,bytes,status). Prefer Resource API for new apps.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "host_fs_write",
+    "local": "host_fs_write",
+    "declaration": "@external(\"host\", \"host_fs_write\") declare function host_fs_write(pathPtr:usize,pathLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Physical Files",
+    "semantics": "Asynchronously writes a file in the mounted directory. Completion callback: hostFsWriteDone(bytes).",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "net_listen",
+    "local": "host_net_listen",
+    "declaration": "@external(\"host\", \"net_listen\") declare function host_net_listen(port:i32): i32;",
+    "category": "Network",
+    "semantics": "Starts a shared localhost virtual HTTP listener.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "net_poll_request",
+    "local": "host_net_poll_request",
+    "declaration": "@external(\"host\", \"net_poll_request\") declare function host_net_poll_request(port:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Network",
+    "semantics": "Polls one virtual-local-network request.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "net_accept",
+    "local": "host_net_accept",
+    "declaration": "@external(\"host\", \"net_accept\") declare function host_net_accept(port:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Network",
+    "semantics": "Reads a queued virtual local request payload.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "net_send_response",
+    "local": "host_net_send_response",
+    "declaration": "@external(\"host\", \"net_send_response\") declare function host_net_send_response(port:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Network",
+    "semantics": "Updates virtual localhost response bytes.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "net_open_external_browser",
+    "local": "host_net_open_external_browser",
+    "declaration": "@external(\"host\", \"net_open_external_browser\") declare function host_net_open_external_browser(port:i32): i32;",
+    "category": "Network",
+    "semantics": "Opens the virtual localhost service in a real browser tab.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "net_fetch",
+    "local": "host_net_fetch",
+    "declaration": "@external(\"host\", \"net_fetch\") declare function host_net_fetch(urlPtr:usize,urlLen:i32,bodyPtr:usize,bodyLen:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Network",
+    "semantics": "Legacy virtual-network fetch helper; synchronous return cannot await remote work. Prefer HTTP Bridge.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "http_request",
+    "local": "host_http_request",
+    "declaration": "@external(\"host\", \"http_request\") declare function host_http_request(mPtr:usize,mLen:i32,uPtr:usize,uLen:i32,bPtr:usize,bLen:i32): i32;",
+    "category": "HTTP",
+    "semantics": "Starts an outbound HTTP request and returns the exact request id. Poll status/size then read response; optional httpResponse callback.",
+    "asyncModel": "async-poll/callback"
+  },
+  {
+    "name": "http_get_status",
+    "local": "host_http_get_status",
+    "declaration": "@external(\"host\", \"http_get_status\") declare function host_http_get_status(reqId:i32): i32;",
+    "category": "HTTP",
+    "semantics": "Returns 0 pending, positive HTTP status, negative transport error.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "http_get_response_size",
+    "local": "host_http_get_response_size",
+    "declaration": "@external(\"host\", \"http_get_response_size\") declare function host_http_get_response_size(reqId:i32): i32;",
+    "category": "HTTP",
+    "semantics": "Returns buffered HTTP response byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "http_read_response",
+    "local": "host_http_read_response",
+    "declaration": "@external(\"host\", \"http_read_response\") declare function host_http_read_response(reqId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "HTTP",
+    "semantics": "Copies buffered HTTP response into WASM memory.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "socket_capabilities",
+    "local": "host_socket_capabilities",
+    "declaration": "@external(\"host\", \"socket_capabilities\") declare function host_socket_capabilities(): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Returns raw packet transport capability mask. No HTTP/TLS parsing is performed by the OS.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "tcp_connect",
+    "local": "host_tcp_connect",
+    "declaration": "@external(\"host\", \"tcp_connect\") declare function host_tcp_connect(hPtr:usize,hLen:i32,port:i32,flags:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Opens an owner-bound raw TCP byte stream. Host resolves/connects only; HTTP/TLS framing remains entirely in WASM.",
+    "asyncModel": "async-callback/poll"
+  },
+  {
+    "name": "tcp_state",
+    "local": "host_tcp_state",
+    "declaration": "@external(\"host\", \"tcp_state\") declare function host_tcp_state(socketId:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Returns socket state.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "tcp_send",
+    "local": "host_tcp_send",
+    "declaration": "@external(\"host\", \"tcp_send\") declare function host_tcp_send(socketId:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Writes opaque bytes to the owner-bound TCP stream; OS does not inspect protocol contents.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "tcp_receive",
+    "local": "host_tcp_receive",
+    "declaration": "@external(\"host\", \"tcp_receive\") declare function host_tcp_receive(socketId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Copies opaque received TCP bytes into owner WASM memory; OS does not parse TLS/HTTP.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "tcp_pending",
+    "local": "host_tcp_pending",
+    "declaration": "@external(\"host\", \"tcp_pending\") declare function host_tcp_pending(socketId:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Returns pending receive byte count.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "tcp_close",
+    "local": "host_tcp_close",
+    "declaration": "@external(\"host\", \"tcp_close\") declare function host_tcp_close(socketId:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Closes socket.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "tcp_error_size",
+    "local": "host_tcp_error_size",
+    "declaration": "@external(\"host\", \"tcp_error_size\") declare function host_tcp_error_size(socketId:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Returns socket error UTF-8 size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "tcp_read_error",
+    "local": "host_tcp_read_error",
+    "declaration": "@external(\"host\", \"tcp_read_error\") declare function host_tcp_read_error(socketId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Reads socket error text.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ipc_write",
+    "local": "host_ipc_write",
+    "declaration": "@external(\"host\", \"ipc_write\") declare function host_ipc_write(channel:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "IPC Legacy",
+    "semantics": "Legacy last-value shared channel. Prefer Service Fabric.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ipc_read",
+    "local": "host_ipc_read",
+    "declaration": "@external(\"host\", \"ipc_read\") declare function host_ipc_read(channel:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "IPC Legacy",
+    "semantics": "Reads legacy shared channel.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ipc_peek",
+    "local": "host_ipc_peek",
+    "declaration": "@external(\"host\", \"ipc_peek\") declare function host_ipc_peek(channel:i32): i32;",
+    "category": "IPC Legacy",
+    "semantics": "Returns legacy channel byte count.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "usb_request_device",
+    "local": "host_usb_request_device",
+    "declaration": "@external(\"host\", \"usb_request_device\") declare function host_usb_request_device(vendorId:i32,productId:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Requests/open WebUSB device.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "usb_transfer_out",
+    "local": "host_usb_transfer_out",
+    "declaration": "@external(\"host\", \"usb_transfer_out\") declare function host_usb_transfer_out(endpoint:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Submits USB OUT transfer.",
+    "asyncModel": "async"
+  },
+  {
+    "name": "usb_transfer_in",
+    "local": "host_usb_transfer_in",
+    "declaration": "@external(\"host\", \"usb_transfer_in\") declare function host_usb_transfer_in(endpoint:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Submits USB IN transfer; usbDataReceived callback.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "serial_request_port",
+    "local": "host_serial_request_port",
+    "declaration": "@external(\"host\", \"serial_request_port\") declare function host_serial_request_port(baudRate:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Requests and opens a WebSerial port.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "serial_write",
+    "local": "host_serial_write",
+    "declaration": "@external(\"host\", \"serial_write\") declare function host_serial_write(dataPtr:usize,dataLen:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Queues bytes to serial writer.",
+    "asyncModel": "async"
+  },
+  {
+    "name": "serial_read",
+    "local": "host_serial_read",
+    "declaration": "@external(\"host\", \"serial_read\") declare function host_serial_read(outPtr:usize,outCap:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Reads host-buffered serial bytes if available.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "hid_send_report",
+    "local": "host_hid_send_report",
+    "declaration": "@external(\"host\", \"hid_send_report\") declare function host_hid_send_report(reportId:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Sends HID output report when a HID device is available.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ble_request_device",
+    "local": "host_ble_request_device",
+    "declaration": "@external(\"host\", \"ble_request_device\") declare function host_ble_request_device(serviceUuidPtr:usize,serviceUuidLen:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Requests BLE device/service.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "ble_write",
+    "local": "host_ble_write",
+    "declaration": "@external(\"host\", \"ble_write\") declare function host_ble_write(charUuidPtr:usize,charUuidLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Writes BLE characteristic.",
+    "asyncModel": "async"
+  },
+  {
+    "name": "ble_read",
+    "local": "host_ble_read",
+    "declaration": "@external(\"host\", \"ble_read\") declare function host_ble_read(charUuidPtr:usize,charUuidLen:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Hardware",
+    "semantics": "Starts BLE characteristic read.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "gamepad_count",
+    "local": "host_gamepad_count",
+    "declaration": "@external(\"host\", \"gamepad_count\") declare function host_gamepad_count(): i32;",
+    "category": "Sensors",
+    "semantics": "Returns connected gamepad count.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "gamepad_get_state",
+    "local": "host_gamepad_get_state",
+    "declaration": "@external(\"host\", \"gamepad_get_state\") declare function host_gamepad_get_state(gamepadIndex:i32,outPtr:usize): i32;",
+    "category": "Sensors",
+    "semantics": "Writes normalized gamepad state to WASM memory.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "geo_get_position",
+    "local": "host_geo_get_position",
+    "declaration": "@external(\"host\", \"geo_get_position\") declare function host_geo_get_position(outPtr:usize): i32;",
+    "category": "Sensors",
+    "semantics": "Writes latest geolocation values.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "motion_get_orientation",
+    "local": "host_motion_get_orientation",
+    "declaration": "@external(\"host\", \"motion_get_orientation\") declare function host_motion_get_orientation(outPtr:usize): i32;",
+    "category": "Sensors",
+    "semantics": "Writes latest device orientation values.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "media_start_camera",
+    "local": "host_media_start_camera",
+    "declaration": "@external(\"host\", \"media_start_camera\") declare function host_media_start_camera(width:i32,height:i32): i32;",
+    "category": "Media",
+    "semantics": "Starts camera capture through host MediaDevices.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "media_get_video_frame",
+    "local": "host_media_get_video_frame",
+    "declaration": "@external(\"host\", \"media_get_video_frame\") declare function host_media_get_video_frame(outPtr:usize,outCap:i32): i32;",
+    "category": "Media",
+    "semantics": "Copies latest camera RGBA frame into WASM.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "media_get_mic_fft",
+    "local": "host_media_get_mic_fft",
+    "declaration": "@external(\"host\", \"media_get_mic_fft\") declare function host_media_get_mic_fft(outPtr:usize,binCount:i32): i32;",
+    "category": "Media",
+    "semantics": "Copies latest microphone FFT bins.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "audio_play_pcm",
+    "local": "host_audio_play_pcm",
+    "declaration": "@external(\"host\", \"audio_play_pcm\") declare function host_audio_play_pcm(pcmPtr:usize,pcmLen:i32,sampleRate:i32): i32;",
+    "category": "Media",
+    "semantics": "Plays PCM audio through WebAudio.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "audio_tone",
+    "local": "host_audio_tone",
+    "declaration": "@external(\"host\", \"audio_tone\") declare function host_audio_tone(freq:f64,durationMs:i32,volume:f64): i32;",
+    "category": "Media",
+    "semantics": "Synthesizes a host audio tone.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "video_decoder_init",
+    "local": "host_video_decoder_init",
+    "declaration": "@external(\"host\", \"video_decoder_init\") declare function host_video_decoder_init(codecPtr:usize,codecLen:i32): i32;",
+    "category": "Media",
+    "semantics": "Initializes hardware/browser video decoder.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "video_decoder_decode",
+    "local": "host_video_decoder_decode",
+    "declaration": "@external(\"host\", \"video_decoder_decode\") declare function host_video_decoder_decode(nalPtr:usize,nalLen:i32,isKey:i32,timestamp:f64): i32;",
+    "category": "Media",
+    "semantics": "Submits encoded video chunk to WebCodecs.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "video_draw_to_framebuffer",
+    "local": "host_video_draw_to_framebuffer",
+    "declaration": "@external(\"host\", \"video_draw_to_framebuffer\") declare function host_video_draw_to_framebuffer(bufPtr:usize,destW:i32,destH:i32,dx:i32,dy:i32,dw:i32,dh:i32): i32;",
+    "category": "Media",
+    "semantics": "Copies latest decoded/direct video frame into WASM framebuffer region.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ws_connect",
+    "local": "host_ws_connect",
+    "declaration": "@external(\"host\", \"ws_connect\") declare function host_ws_connect(uPtr:usize,uLen:i32): i32;",
+    "category": "WebSocket/WebRTC",
+    "semantics": "Connects WebSocket or local WHEP/HLS stream abstraction.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "ws_send",
+    "local": "host_ws_send",
+    "declaration": "@external(\"host\", \"ws_send\") declare function host_ws_send(wsId:i32,dPtr:usize,dLen:i32): i32;",
+    "category": "WebSocket/WebRTC",
+    "semantics": "Sends WebSocket bytes when applicable.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ws_receive",
+    "local": "host_ws_receive",
+    "declaration": "@external(\"host\", \"ws_receive\") declare function host_ws_receive(wsId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "WebSocket/WebRTC",
+    "semantics": "Reads queued WebSocket bytes.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ws_close",
+    "local": "host_ws_close",
+    "declaration": "@external(\"host\", \"ws_close\") declare function host_ws_close(wsId:i32): i32;",
+    "category": "WebSocket/WebRTC",
+    "semantics": "Closes WebSocket/WHEP/HLS record.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "stream_stats_poll",
+    "local": "host_stream_stats_poll",
+    "declaration": "@external(\"host\", \"stream_stats_poll\") declare function host_stream_stats_poll(streamId:i32): i32;",
+    "category": "WebSocket/WebRTC",
+    "semantics": "Refreshes cached real WebRTC telemetry asynchronously.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "stream_stat",
+    "local": "host_stream_stat",
+    "declaration": "@external(\"host\", \"stream_stat\") declare function host_stream_stat(streamId:i32,metricId:i32): f64;",
+    "category": "WebSocket/WebRTC",
+    "semantics": "Reads cached stream telemetry metric.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_init",
+    "local": "host_ai_init",
+    "declaration": "@external(\"host\", \"ai_init\") declare function host_ai_init(): i32;",
+    "category": "Vision AI",
+    "semantics": "Initializes local ONNX Runtime Web vision subsystem.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_pick_model",
+    "local": "host_ai_pick_model",
+    "declaration": "@external(\"host\", \"ai_pick_model\") declare function host_ai_pick_model(kind:i32): i32;",
+    "category": "Vision AI",
+    "semantics": "Picks YOLO/OSNet ONNX model file.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "ai_pick_reference",
+    "local": "host_ai_pick_reference",
+    "declaration": "@external(\"host\", \"ai_pick_reference\") declare function host_ai_pick_reference(): i32;",
+    "category": "Vision AI",
+    "semantics": "Picks reference image.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "ai_set_enabled",
+    "local": "host_ai_set_enabled",
+    "declaration": "@external(\"host\", \"ai_set_enabled\") declare function host_ai_set_enabled(enabled:i32): i32;",
+    "category": "Vision AI",
+    "semantics": "Arms/disarms AI side-band processing.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_set_config",
+    "local": "host_ai_set_config",
+    "declaration": "@external(\"host\", \"ai_set_config\") declare function host_ai_set_config(key:i32,value:f64): i32;",
+    "category": "Vision AI",
+    "semantics": "Sets vision scheduler/model configuration.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_reid_submit",
+    "local": "host_ai_reid_submit",
+    "declaration": "@external(\"host\", \"ai_reid_submit\") declare function host_ai_reid_submit(trackId:i32,frameSeq:i32,x1:f64,y1:f64,x2:f64,y2:f64): i32;",
+    "category": "Vision AI",
+    "semantics": "Queues one person crop for ReID.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_save_match",
+    "local": "host_ai_save_match",
+    "declaration": "@external(\"host\", \"ai_save_match\") declare function host_ai_save_match(token:i32): i32;",
+    "category": "Vision AI",
+    "semantics": "Persists one AI result snapshot.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_discard_result",
+    "local": "host_ai_discard_result",
+    "declaration": "@external(\"host\", \"ai_discard_result\") declare function host_ai_discard_result(token:i32): i32;",
+    "category": "Vision AI",
+    "semantics": "Discards pending ReID result.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_snapshot_draw",
+    "local": "host_ai_snapshot_draw",
+    "declaration": "@external(\"host\", \"ai_snapshot_draw\") declare function host_ai_snapshot_draw(snapshotId:i32,bufPtr:usize,destW:i32,destH:i32,dx:i32,dy:i32,dw:i32,dh:i32): i32;",
+    "category": "Vision AI",
+    "semantics": "Draws stored snapshot into WASM framebuffer.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_reference_draw",
+    "local": "host_ai_reference_draw",
+    "declaration": "@external(\"host\", \"ai_reference_draw\") declare function host_ai_reference_draw(bufPtr:usize,destW:i32,destH:i32,dx:i32,dy:i32,dw:i32,dh:i32): i32;",
+    "category": "Vision AI",
+    "semantics": "Draws reference image into WASM framebuffer.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_snapshot_info",
+    "local": "host_ai_snapshot_info",
+    "declaration": "@external(\"host\", \"ai_snapshot_info\") declare function host_ai_snapshot_info(snapshotId:i32,metricId:i32): f64;",
+    "category": "Vision AI",
+    "semantics": "Reads snapshot metric.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_snapshot_clear",
+    "local": "host_ai_snapshot_clear",
+    "declaration": "@external(\"host\", \"ai_snapshot_clear\") declare function host_ai_snapshot_clear(): i32;",
+    "category": "Vision AI",
+    "semantics": "Clears stored snapshots.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ai_stat",
+    "local": "host_ai_stat",
+    "declaration": "@external(\"host\", \"ai_stat\") declare function host_ai_stat(metricId:i32): f64;",
+    "category": "Vision AI",
+    "semantics": "Reads local vision telemetry metric.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "clipboard_write",
+    "local": "host_clipboard_write",
+    "declaration": "@external(\"host\", \"clipboard_write\") declare function host_clipboard_write(ptr:usize,len:i32): i32;",
+    "category": "Browser Bridge",
+    "semantics": "Writes UTF-8 text to clipboard when permitted.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "clipboard_size",
+    "local": "host_clipboard_size",
+    "declaration": "@external(\"host\", \"clipboard_size\") declare function host_clipboard_size(): i32;",
+    "category": "Browser Bridge",
+    "semantics": "Returns last clipboard text byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "clipboard_read",
+    "local": "host_clipboard_read",
+    "declaration": "@external(\"host\", \"clipboard_read\") declare function host_clipboard_read(outPtr:usize,outCap:i32): i32;",
+    "category": "Browser Bridge",
+    "semantics": "Reads cached clipboard text.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "download_bytes",
+    "local": "download_bytes",
+    "declaration": "@external(\"host\", \"download_bytes\") declare function download_bytes(dataPtr:usize,dataLen:i32,namePtr:usize,nameLen:i32): i32;",
+    "category": "Downloads",
+    "semantics": "Legacy one-shot download. Requires complete payload in WASM memory.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "unicode_text_draw",
+    "local": "host_unicode_text_draw",
+    "declaration": "@external(\"host\", \"unicode_text_draw\") declare function host_unicode_text_draw(bufPtr:usize,destW:i32,destH:i32,textPtr:usize,textLen:i32,x:i32,y:i32,maxWidth:i32,fontPx:i32,color:u32,flags:i32): i32;",
+    "category": "Unicode UI",
+    "semantics": "Rasterizes UTF-8 Unicode text through the browser shaping engine directly into a WASM RGBA framebuffer. flags: bit0 force RTL, bit1 wrap, bit2 bold, bit3 monospace, bit4 auto-direction. Returns rendered pixel height or negative error.",
+    "asyncModel": "sync-cached"
+  },
+  {
+    "name": "resource_pick_file",
+    "local": "host_resource_pick_file",
+    "declaration": "@external(\"host\", \"resource_pick_file\") declare function host_resource_pick_file(acceptPtr:usize,acceptLen:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Creates a resource handle and opens a browser file picker. Handle state becomes READY asynchronously. Callback: resourceOpened(handle,state,sizeLo,sizeHi).",
+    "asyncModel": "async-callback/poll"
+  },
+  {
+    "name": "resource_open_url",
+    "local": "host_resource_open_url",
+    "declaration": "@external(\"host\", \"resource_open_url\") declare function host_resource_open_url(urlPtr:usize,urlLen:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Creates an HTTP(S) random-access resource handle without buffering the whole object. HEAD/Range discovers size.",
+    "asyncModel": "async-callback/poll"
+  },
+  {
+    "name": "resource_open_mounted",
+    "local": "host_resource_open_mounted",
+    "declaration": "@external(\"host\", \"resource_open_mounted\") declare function host_resource_open_mounted(pathPtr:usize,pathLen:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Opens a file from the mounted physical directory as a random-access resource.",
+    "asyncModel": "async-callback/poll"
+  },
+  {
+    "name": "resource_open_vfs",
+    "local": "host_resource_open_vfs",
+    "declaration": "@external(\"host\", \"resource_open_vfs\") declare function host_resource_open_vfs(pathPtr:usize,pathLen:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Opens a shared VFS file as a random-access resource.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_state",
+    "local": "host_resource_state",
+    "declaration": "@external(\"host\", \"resource_state\") declare function host_resource_state(handle:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Resource state: 0 opening, 1 ready, 2 closed, negative error.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_size_lo",
+    "local": "host_resource_size_lo",
+    "declaration": "@external(\"host\", \"resource_size_lo\") declare function host_resource_size_lo(handle:i32): u32;",
+    "category": "Large Resource I/O",
+    "semantics": "Low 32 bits of resource byte length.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_size_hi",
+    "local": "host_resource_size_hi",
+    "declaration": "@external(\"host\", \"resource_size_hi\") declare function host_resource_size_hi(handle:i32): u32;",
+    "category": "Large Resource I/O",
+    "semantics": "High 32 bits of resource byte length.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_name_size",
+    "local": "host_resource_name_size",
+    "declaration": "@external(\"host\", \"resource_name_size\") declare function host_resource_name_size(handle:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "UTF-8 resource display-name byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_read_name",
+    "local": "host_resource_read_name",
+    "declaration": "@external(\"host\", \"resource_read_name\") declare function host_resource_read_name(handle:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Reads UTF-8 resource display name.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_error_size",
+    "local": "host_resource_error_size",
+    "declaration": "@external(\"host\", \"resource_error_size\") declare function host_resource_error_size(handle:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "UTF-8 resource error byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_read_error",
+    "local": "host_resource_read_error",
+    "declaration": "@external(\"host\", \"resource_read_error\") declare function host_resource_read_error(handle:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Reads resource error text.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_read_range",
+    "local": "host_resource_read_range",
+    "declaration": "@external(\"host\", \"resource_read_range\") declare function host_resource_read_range(handle:i32,offsetLo:u32,offsetHi:u32,outPtr:usize,outCap:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Starts an asynchronous random-access read directly into the supplied WASM linear-memory range. Buffer must remain valid until resourceReadDone. Returns request id.",
+    "asyncModel": "async-callback/poll"
+  },
+  {
+    "name": "resource_request_status",
+    "local": "host_resource_request_status",
+    "declaration": "@external(\"host\", \"resource_request_status\") declare function host_resource_request_status(requestId:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Read request status: 0 pending, 1 complete, negative error.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_request_bytes",
+    "local": "host_resource_request_bytes",
+    "declaration": "@external(\"host\", \"resource_request_bytes\") declare function host_resource_request_bytes(requestId:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Completed bytes written by a range read.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_request_release",
+    "local": "host_resource_request_release",
+    "declaration": "@external(\"host\", \"resource_request_release\") declare function host_resource_request_release(requestId:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Releases completed/cancelled read-request bookkeeping. New apps should release each request after observing completion.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_cancel",
+    "local": "host_resource_cancel",
+    "declaration": "@external(\"host\", \"resource_cancel\") declare function host_resource_cancel(requestId:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Cancels a pending range read when possible.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "resource_close",
+    "local": "host_resource_close",
+    "declaration": "@external(\"host\", \"resource_close\") declare function host_resource_close(handle:i32): i32;",
+    "category": "Large Resource I/O",
+    "semantics": "Closes a resource handle and cancels its pending reads.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "download_begin",
+    "local": "host_download_begin",
+    "declaration": "@external(\"host\", \"download_begin\") declare function host_download_begin(namePtr:usize,nameLen:i32,mimePtr:usize,mimeLen:i32): i32;",
+    "category": "Downloads",
+    "semantics": "Begins host-managed chunked download/save stream and returns stream id. WASM need not hold the full output contiguously.",
+    "asyncModel": "async-host-stream"
+  },
+  {
+    "name": "download_write",
+    "local": "host_download_write",
+    "declaration": "@external(\"host\", \"download_write\") declare function host_download_write(downloadId:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Downloads",
+    "semantics": "Copies one chunk from WASM into the host download stream. Returns accepted bytes.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "download_end",
+    "local": "host_download_end",
+    "declaration": "@external(\"host\", \"download_end\") declare function host_download_end(downloadId:i32): i32;",
+    "category": "Downloads",
+    "semantics": "Finalizes and saves/downloads the stream. Callback: downloadEvent(id,state,bytesLo,bytesHi).",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "download_abort",
+    "local": "host_download_abort",
+    "declaration": "@external(\"host\", \"download_abort\") declare function host_download_abort(downloadId:i32): i32;",
+    "category": "Downloads",
+    "semantics": "Aborts a chunked download stream.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "download_state",
+    "local": "host_download_state",
+    "declaration": "@external(\"host\", \"download_state\") declare function host_download_state(downloadId:i32): i32;",
+    "category": "Downloads",
+    "semantics": "Returns stream state: 0 open, 1 finalizing, 2 done, negative error.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_instance_id_size",
+    "local": "host_app_instance_id_size",
+    "declaration": "@external(\"host\", \"app_instance_id_size\") declare function host_app_instance_id_size(): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns UTF-8 byte size of this runtime instance id.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_read_instance_id",
+    "local": "host_app_read_instance_id",
+    "declaration": "@external(\"host\", \"app_read_instance_id\") declare function host_app_read_instance_id(outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Reads this runtime instance id.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_tab_name_size",
+    "local": "host_app_tab_name_size",
+    "declaration": "@external(\"host\", \"app_tab_name_size\") declare function host_app_tab_name_size(): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns UTF-8 byte size of source tab/app name.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_read_tab_name",
+    "local": "host_app_read_tab_name",
+    "declaration": "@external(\"host\", \"app_read_tab_name\") declare function host_app_read_tab_name(outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Reads source tab/app name.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_register",
+    "local": "host_svc_register",
+    "declaration": "@external(\"host\", \"svc_register\") declare function host_svc_register(namePtr:usize,nameLen:i32,versionPtr:usize,versionLen:i32,flags:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Publishes a versioned service owned by this runtime; returns service id. Auto-unregistered when runtime stops.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_unregister",
+    "local": "host_svc_unregister",
+    "declaration": "@external(\"host\", \"svc_unregister\") declare function host_svc_unregister(serviceId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Unpublishes one owned service.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_provider_count",
+    "local": "host_svc_provider_count",
+    "declaration": "@external(\"host\", \"svc_provider_count\") declare function host_svc_provider_count(namePtr:usize,nameLen:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns live provider count for a service name.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_find_provider",
+    "local": "host_svc_find_provider",
+    "declaration": "@external(\"host\", \"svc_find_provider\") declare function host_svc_find_provider(namePtr:usize,nameLen:i32,index:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns service id for indexed live provider.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_service_flags",
+    "local": "host_svc_service_flags",
+    "declaration": "@external(\"host\", \"svc_service_flags\") declare function host_svc_service_flags(serviceId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns provider service flags.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_service_version_size",
+    "local": "host_svc_service_version_size",
+    "declaration": "@external(\"host\", \"svc_service_version_size\") declare function host_svc_service_version_size(serviceId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns provider version UTF-8 size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_read_service_version",
+    "local": "host_svc_read_service_version",
+    "declaration": "@external(\"host\", \"svc_read_service_version\") declare function host_svc_read_service_version(serviceId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Reads provider version string.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_request",
+    "local": "host_svc_request",
+    "declaration": "@external(\"host\", \"svc_request\") declare function host_svc_request(servicePtr:usize,serviceLen:i32,methodPtr:usize,methodLen:i32,dataPtr:usize,dataLen:i32,timeoutMs:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Routes an asynchronous request to one live provider using round-robin. Returns correlation/request id. Provider callback: serviceRequest(requestId,serviceId,methodBytes,payloadBytes).",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "svc_request_provider",
+    "local": "host_svc_request_provider",
+    "declaration": "@external(\"host\", \"svc_request_provider\") declare function host_svc_request_provider(serviceId:i32,methodPtr:usize,methodLen:i32,dataPtr:usize,dataLen:i32,timeoutMs:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Targets one discovered service provider id/version explicitly. Returns correlation/request id or a negative service state.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "svc_request_method_size",
+    "local": "host_svc_request_method_size",
+    "declaration": "@external(\"host\", \"svc_request_method_size\") declare function host_svc_request_method_size(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns incoming request method byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_request_read_method",
+    "local": "host_svc_request_read_method",
+    "declaration": "@external(\"host\", \"svc_request_read_method\") declare function host_svc_request_read_method(requestId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Provider reads incoming request method.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_request_payload_size",
+    "local": "host_svc_request_payload_size",
+    "declaration": "@external(\"host\", \"svc_request_payload_size\") declare function host_svc_request_payload_size(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns incoming request payload byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_request_read_payload",
+    "local": "host_svc_request_read_payload",
+    "declaration": "@external(\"host\", \"svc_request_read_payload\") declare function host_svc_request_read_payload(requestId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Provider reads incoming request payload.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_request_status",
+    "local": "host_svc_request_status",
+    "declaration": "@external(\"host\", \"svc_request_status\") declare function host_svc_request_status(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns request state: 0 pending, 1 streaming, 2 complete, negative error/cancel/timeout.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_request_release",
+    "local": "host_svc_request_release",
+    "declaration": "@external(\"host\", \"svc_request_release\") declare function host_svc_request_release(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Client releases completed/cancelled request state and buffered chunks/response. Pending requests cannot be released; cancel first.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_respond",
+    "local": "host_svc_respond",
+    "declaration": "@external(\"host\", \"svc_respond\") declare function host_svc_respond(requestId:i32,status:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Provider sends final response. Client callback: serviceResponse(requestId,status,payloadBytes).",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "svc_response_size",
+    "local": "host_svc_response_size",
+    "declaration": "@external(\"host\", \"svc_response_size\") declare function host_svc_response_size(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns final response byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_response_read",
+    "local": "host_svc_response_read",
+    "declaration": "@external(\"host\", \"svc_response_read\") declare function host_svc_response_read(requestId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Client reads final response bytes.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_respond_chunk",
+    "local": "host_svc_respond_chunk",
+    "declaration": "@external(\"host\", \"svc_respond_chunk\") declare function host_svc_respond_chunk(requestId:i32,flags:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Provider emits streaming response chunk. flag bit0=FINAL. Returns accepted bytes, -2 when per-request host backpressure limit is reached. Client callback: serviceChunk(requestId,flags,bytes,pendingChunks).",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "svc_chunk_pending",
+    "local": "host_svc_chunk_pending",
+    "declaration": "@external(\"host\", \"svc_chunk_pending\") declare function host_svc_chunk_pending(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns queued unread response chunks.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_chunk_size",
+    "local": "host_svc_chunk_size",
+    "declaration": "@external(\"host\", \"svc_chunk_size\") declare function host_svc_chunk_size(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns next queued chunk byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_chunk_flags",
+    "local": "host_svc_chunk_flags",
+    "declaration": "@external(\"host\", \"svc_chunk_flags\") declare function host_svc_chunk_flags(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns flags for next queued chunk.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_chunk_read",
+    "local": "host_svc_chunk_read",
+    "declaration": "@external(\"host\", \"svc_chunk_read\") declare function host_svc_chunk_read(requestId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Reads and consumes next response chunk.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_cancel",
+    "local": "host_svc_cancel",
+    "declaration": "@external(\"host\", \"svc_cancel\") declare function host_svc_cancel(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Cancels an owned request; provider callback: serviceCancelled(requestId,reason).",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_subscribe",
+    "local": "host_svc_subscribe",
+    "declaration": "@external(\"host\", \"svc_subscribe\") declare function host_svc_subscribe(servicePtr:usize,serviceLen:i32,topicPtr:usize,topicLen:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Subscribes to provider events by service name and topic; topic * is wildcard. Returns subscription id.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_unsubscribe",
+    "local": "host_svc_unsubscribe",
+    "declaration": "@external(\"host\", \"svc_unsubscribe\") declare function host_svc_unsubscribe(subscriptionId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Removes subscription.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_emit",
+    "local": "host_svc_emit",
+    "declaration": "@external(\"host\", \"svc_emit\") declare function host_svc_emit(serviceId:i32,topicPtr:usize,topicLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Provider broadcasts event to matching subscribers. Subscriber callback: serviceEvent(eventId,subscriptionId,topicBytes,payloadBytes).",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_event_topic_size",
+    "local": "host_svc_event_topic_size",
+    "declaration": "@external(\"host\", \"svc_event_topic_size\") declare function host_svc_event_topic_size(eventId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns event topic byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_event_read_topic",
+    "local": "host_svc_event_read_topic",
+    "declaration": "@external(\"host\", \"svc_event_read_topic\") declare function host_svc_event_read_topic(eventId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Reads event topic bytes.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_event_payload_size",
+    "local": "host_svc_event_payload_size",
+    "declaration": "@external(\"host\", \"svc_event_payload_size\") declare function host_svc_event_payload_size(eventId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns event payload byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_event_read_payload",
+    "local": "host_svc_event_read_payload",
+    "declaration": "@external(\"host\", \"svc_event_read_payload\") declare function host_svc_event_read_payload(eventId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Reads event payload bytes.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_event_ack",
+    "local": "host_svc_event_ack",
+    "declaration": "@external(\"host\", \"svc_event_ack\") declare function host_svc_event_ack(eventId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Acknowledges/removes one delivered event payload.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "compute_capabilities",
+    "local": "host_compute_capabilities",
+    "declaration": "@external(\"host\", \"compute_capabilities\") declare function host_compute_capabilities(): i32;",
+    "category": "Compute",
+    "semantics": "Generic compute capability bitmask. bit0=WebAssembly SIMD128 build path, bit1=SharedArrayBuffer available, bit2=crossOriginIsolated, bit3=WebGPU API present, bit4=multiple logical hardware threads reported. Capability discovery only; applications must still handle runtime failures.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "compute_hardware_threads",
+    "local": "host_compute_hardware_threads",
+    "declaration": "@external(\"host\", \"compute_hardware_threads\") declare function host_compute_hardware_threads(): i32;",
+    "category": "Compute",
+    "semantics": "Returns navigator.hardwareConcurrency when available, otherwise 1. Useful for scheduling and telemetry; does not itself create threads.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "compute_device_memory_mb",
+    "local": "host_compute_device_memory_mb",
+    "declaration": "@external(\"host\", \"compute_device_memory_mb\") declare function host_compute_device_memory_mb(): i32;",
+    "category": "Compute",
+    "semantics": "Approximate device-memory hint in MiB from navigator.deviceMemory when exposed; returns 0 when unavailable. This is a coarse browser hint, not an allocation guarantee.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_set_manifest",
+    "local": "host_svc_set_manifest",
+    "declaration": "@external(\"host\", \"svc_set_manifest\") declare function host_svc_set_manifest(serviceId:i32,jsonPtr:usize,jsonLen:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Stores opaque UTF-8/JSON provider manifest bytes for developer discovery. The Host does not interpret application schema fields.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_manifest_size",
+    "local": "host_svc_manifest_size",
+    "declaration": "@external(\"host\", \"svc_manifest_size\") declare function host_svc_manifest_size(serviceId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Returns service manifest byte size, or negative if unavailable.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_read_manifest",
+    "local": "host_svc_read_manifest",
+    "declaration": "@external(\"host\", \"svc_read_manifest\") declare function host_svc_read_manifest(serviceId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Reads provider manifest bytes into WASM memory.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_set_load",
+    "local": "host_svc_set_load",
+    "declaration": "@external(\"host\", \"svc_set_load\") declare function host_svc_set_load(serviceId:i32,active:i32,queued:i32,capacity:i32,ewmaMs:f64): i32;",
+    "category": "Service Fabric",
+    "semantics": "Provider publishes current load/queue/capacity/latency telemetry. Used for least-loaded routing; values are advisory.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_provider_metric",
+    "local": "host_svc_provider_metric",
+    "declaration": "@external(\"host\", \"svc_provider_metric\") declare function host_svc_provider_metric(serviceId:i32,metricId:i32): f64;",
+    "category": "Service Fabric",
+    "semantics": "Reads provider metric: 1 active, 2 queued, 3 capacity, 4 EWMA ms, 5 age ms, 6 health(1/0).",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_request_ex",
+    "local": "host_svc_request_ex",
+    "declaration": "@external(\"host\", \"svc_request_ex\") declare function host_svc_request_ex(serviceNamePtr:usize,serviceNameLen:i32,methodPtr:usize,methodLen:i32,payloadPtr:usize,payloadLen:i32,timeoutMs:i32,priority:i32,flags:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Extended service request with priority and opaque flags. Host selects a healthy least-loaded provider; callback semantics match svc_request.",
+    "asyncModel": "async-callback/poll"
+  },
+  {
+    "name": "svc_request_provider_ex",
+    "local": "host_svc_request_provider_ex",
+    "declaration": "@external(\"host\", \"svc_request_provider_ex\") declare function host_svc_request_provider_ex(serviceId:i32,methodPtr:usize,methodLen:i32,payloadPtr:usize,payloadLen:i32,timeoutMs:i32,priority:i32,flags:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Extended request targeted at one exact provider.",
+    "asyncModel": "async-callback/poll"
+  },
+  {
+    "name": "svc_request_priority",
+    "local": "host_svc_request_priority",
+    "declaration": "@external(\"host\", \"svc_request_priority\") declare function host_svc_request_priority(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Provider reads normalized request priority 0..100.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_request_flags",
+    "local": "host_svc_request_flags",
+    "declaration": "@external(\"host\", \"svc_request_flags\") declare function host_svc_request_flags(requestId:i32): i32;",
+    "category": "Service Fabric",
+    "semantics": "Provider reads opaque request flags supplied by caller.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_stable_id_size",
+    "local": "host_app_stable_id_size",
+    "declaration": "@external(\"host\", \"app_stable_id_size\") declare function host_app_stable_id_size(): i32;",
+    "category": "App Model",
+    "semantics": "Returns stable installed-app identifier byte size. Unlike runtime instance id, this survives restart/workspace restore.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_read_stable_id",
+    "local": "host_app_read_stable_id",
+    "declaration": "@external(\"host\", \"app_read_stable_id\") declare function host_app_read_stable_id(outPtr:usize,outCap:i32): i32;",
+    "category": "App Model",
+    "semantics": "Reads stable installed-app identifier UTF-8 bytes.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_manifest_set",
+    "local": "host_app_manifest_set",
+    "declaration": "@external(\"host\", \"app_manifest_set\") declare function host_app_manifest_set(jsonPtr:usize,jsonLen:i32): i32;",
+    "category": "App Model",
+    "semantics": "Publishes the application semantic manifest (wasmos.app/1 JSON): role, summary, kind, permissions, provides/requires, intents, lifecycle and composition hints. Host validates/normalizes it and exposes it to Gemini/system graph.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_manifest_size",
+    "local": "host_app_manifest_size",
+    "declaration": "@external(\"host\", \"app_manifest_size\") declare function host_app_manifest_size(): i32;",
+    "category": "App Model",
+    "semantics": "Returns normalized semantic app manifest UTF-8 byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_manifest_read",
+    "local": "host_app_manifest_read",
+    "declaration": "@external(\"host\", \"app_manifest_read\") declare function host_app_manifest_read(outPtr:usize,outCap:i32): i32;",
+    "category": "App Model",
+    "semantics": "Reads normalized semantic app manifest JSON.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_ready",
+    "local": "host_app_ready",
+    "declaration": "@external(\"host\", \"app_ready\") declare function host_app_ready(state:i32): i32;",
+    "category": "Reliability",
+    "semantics": "Publishes lifecycle readiness. state 0=starting, 1=ready, -1=degraded, -2=failed. Microservice verification requires READY.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_health_set",
+    "local": "host_app_health_set",
+    "declaration": "@external(\"host\", \"app_health_set\") declare function host_app_health_set(status:i32,code:i32,msgPtr:usize,msgLen:i32): i32;",
+    "category": "Reliability",
+    "semantics": "Publishes structured health state and diagnostic message to OS supervisor/service graph.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_heartbeat",
+    "local": "host_app_heartbeat",
+    "declaration": "@external(\"host\", \"app_heartbeat\") declare function host_app_heartbeat(workUnits:i32,progress:f64): i32;",
+    "category": "Reliability",
+    "semantics": "Refreshes cooperative process heartbeat and optional work/progress telemetry.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_restart_policy",
+    "local": "host_app_restart_policy",
+    "declaration": "@external(\"host\", \"app_restart_policy\") declare function host_app_restart_policy(mode:i32,maxRestarts:i32,windowMs:i32): i32;",
+    "category": "Reliability",
+    "semantics": "Sets OS restart policy: 0=never,1=on-fault,2=always; bounded by maxRestarts/window. Host may quarantine crash loops.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "permission_query",
+    "local": "host_permission_query",
+    "declaration": "@external(\"host\", \"permission_query\") declare function host_permission_query(namePtr:usize,nameLen:i32): i32;",
+    "category": "Security",
+    "semantics": "Returns OS grant state for one capability: 1=allowed, 0=ask/unset, -1=denied. Browser-level permission may still require user gesture.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "permission_request",
+    "local": "host_permission_request",
+    "declaration": "@external(\"host\", \"permission_request\") declare function host_permission_request(namePtr:usize,nameLen:i32,reasonPtr:usize,reasonLen:i32): i32;",
+    "category": "Security",
+    "semantics": "Starts asynchronous OS permission request and returns request id. Completion callback permissionDecision(requestId,state).",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "permission_revoke",
+    "local": "host_permission_revoke",
+    "declaration": "@external(\"host\", \"permission_revoke\") declare function host_permission_revoke(namePtr:usize,nameLen:i32): i32;",
+    "category": "Security",
+    "semantics": "Revokes this app OS-level capability grant immediately.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "permission_policy_size",
+    "local": "host_permission_policy_size",
+    "declaration": "@external(\"host\", \"permission_policy_size\") declare function host_permission_policy_size(): i32;",
+    "category": "Security",
+    "semantics": "Returns effective permission policy JSON byte size: declared, observed, granted, denied and pending.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "permission_policy_read",
+    "local": "host_permission_policy_read",
+    "declaration": "@external(\"host\", \"permission_policy_read\") declare function host_permission_policy_read(outPtr:usize,outCap:i32): i32;",
+    "category": "Security",
+    "semantics": "Reads effective permission policy JSON.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_storage_set",
+    "local": "host_app_storage_set",
+    "declaration": "@external(\"host\", \"app_storage_set\") declare function host_app_storage_set(keyPtr:usize,keyLen:i32,valuePtr:usize,valueLen:i32): i32;",
+    "category": "App Storage",
+    "semantics": "Writes app-private persistent bytes namespaced by stable app id. Preferred over legacy global storage.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_storage_get",
+    "local": "host_app_storage_get",
+    "declaration": "@external(\"host\", \"app_storage_get\") declare function host_app_storage_get(keyPtr:usize,keyLen:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "App Storage",
+    "semantics": "Reads app-private persistent bytes.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_storage_size",
+    "local": "host_app_storage_size",
+    "declaration": "@external(\"host\", \"app_storage_size\") declare function host_app_storage_size(keyPtr:usize,keyLen:i32): i32;",
+    "category": "App Storage",
+    "semantics": "Returns app-private value byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_storage_delete",
+    "local": "host_app_storage_delete",
+    "declaration": "@external(\"host\", \"app_storage_delete\") declare function host_app_storage_delete(keyPtr:usize,keyLen:i32): i32;",
+    "category": "App Storage",
+    "semantics": "Deletes app-private persistent value.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_fs_mkdir",
+    "local": "host_app_fs_mkdir",
+    "declaration": "@external(\"host\", \"app_fs_mkdir\") declare function host_app_fs_mkdir(pathPtr:usize,pathLen:i32): i32;",
+    "category": "App VFS",
+    "semantics": "Creates directory inside /appdata/<stable-app-id>/; path traversal outside sandbox is rejected.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_fs_write",
+    "local": "host_app_fs_write",
+    "declaration": "@external(\"host\", \"app_fs_write\") declare function host_app_fs_write(pathPtr:usize,pathLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "App VFS",
+    "semantics": "Writes file inside app-private VFS sandbox.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_fs_read",
+    "local": "host_app_fs_read",
+    "declaration": "@external(\"host\", \"app_fs_read\") declare function host_app_fs_read(pathPtr:usize,pathLen:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "App VFS",
+    "semantics": "Reads file inside app-private VFS sandbox.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_fs_size",
+    "local": "host_app_fs_size",
+    "declaration": "@external(\"host\", \"app_fs_size\") declare function host_app_fs_size(pathPtr:usize,pathLen:i32): i32;",
+    "category": "App VFS",
+    "semantics": "Returns app-private VFS file size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_fs_exists",
+    "local": "host_app_fs_exists",
+    "declaration": "@external(\"host\", \"app_fs_exists\") declare function host_app_fs_exists(pathPtr:usize,pathLen:i32): i32;",
+    "category": "App VFS",
+    "semantics": "Tests path existence inside app-private VFS sandbox.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "app_fs_delete",
+    "local": "host_app_fs_delete",
+    "declaration": "@external(\"host\", \"app_fs_delete\") declare function host_app_fs_delete(pathPtr:usize,pathLen:i32): i32;",
+    "category": "App VFS",
+    "semantics": "Deletes path inside app-private VFS sandbox.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "secret_set",
+    "local": "host_secret_set",
+    "declaration": "@external(\"host\", \"secret_set\") declare function host_secret_set(namePtr:usize,nameLen:i32,valuePtr:usize,valueLen:i32): i32;",
+    "category": "Credential Vault",
+    "semantics": "Stores an ephemeral non-portable secret in OS memory. Secrets are intentionally excluded from workspace JSON.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "secret_size",
+    "local": "host_secret_size",
+    "declaration": "@external(\"host\", \"secret_size\") declare function host_secret_size(namePtr:usize,nameLen:i32): i32;",
+    "category": "Credential Vault",
+    "semantics": "Returns ephemeral secret byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "secret_read",
+    "local": "host_secret_read",
+    "declaration": "@external(\"host\", \"secret_read\") declare function host_secret_read(namePtr:usize,nameLen:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Credential Vault",
+    "semantics": "Reads app-scoped ephemeral secret bytes; requires credential.vault permission.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "secret_delete",
+    "local": "host_secret_delete",
+    "declaration": "@external(\"host\", \"secret_delete\") declare function host_secret_delete(namePtr:usize,nameLen:i32): i32;",
+    "category": "Credential Vault",
+    "semantics": "Deletes app-scoped ephemeral secret.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_contract_set",
+    "local": "host_svc_contract_set",
+    "declaration": "@external(\"host\", \"svc_contract_set\") declare function host_svc_contract_set(serviceId:i32,jsonPtr:usize,jsonLen:i32): i32;",
+    "category": "Service Fabric 4",
+    "semantics": "Publishes validated wasmos.service/1 contract JSON including methods, JSON schemas, events, idempotency and optional WIT text.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_contract_size",
+    "local": "host_svc_contract_size",
+    "declaration": "@external(\"host\", \"svc_contract_size\") declare function host_svc_contract_size(serviceId:i32): i32;",
+    "category": "Service Fabric 4",
+    "semantics": "Returns service contract JSON byte size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_contract_read",
+    "local": "host_svc_contract_read",
+    "declaration": "@external(\"host\", \"svc_contract_read\") declare function host_svc_contract_read(serviceId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Service Fabric 4",
+    "semantics": "Reads normalized service contract JSON.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_provider_count_compatible",
+    "local": "host_svc_provider_count_compatible",
+    "declaration": "@external(\"host\", \"svc_provider_count_compatible\") declare function host_svc_provider_count_compatible(namePtr:usize,nameLen:i32,rangePtr:usize,rangeLen:i32): i32;",
+    "category": "Service Fabric 4",
+    "semantics": "Counts live providers whose semantic version satisfies range (*, exact, ^major.minor.patch, ~major.minor.patch, >=x.y.z).",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_find_provider_compatible",
+    "local": "host_svc_find_provider_compatible",
+    "declaration": "@external(\"host\", \"svc_find_provider_compatible\") declare function host_svc_find_provider_compatible(namePtr:usize,nameLen:i32,rangePtr:usize,rangeLen:i32,index:i32): i32;",
+    "category": "Service Fabric 4",
+    "semantics": "Returns compatible provider id by index.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_request_compatible",
+    "local": "host_svc_request_compatible",
+    "declaration": "@external(\"host\", \"svc_request_compatible\") declare function host_svc_request_compatible(servicePtr:usize,serviceLen:i32,rangePtr:usize,rangeLen:i32,methodPtr:usize,methodLen:i32,payloadPtr:usize,payloadLen:i32,timeoutMs:i32,priority:i32,flags:i32): i32;",
+    "category": "Service Fabric 4",
+    "semantics": "Extended request with semantic-version range; OS chooses healthy least-loaded compatible provider.",
+    "asyncModel": "async-callback/poll"
+  },
+  {
+    "name": "svc_dependency_declare",
+    "local": "host_svc_dependency_declare",
+    "declaration": "@external(\"host\", \"svc_dependency_declare\") declare function host_svc_dependency_declare(namePtr:usize,nameLen:i32,rangePtr:usize,rangeLen:i32,flags:i32): i32;",
+    "category": "Service Fabric 4",
+    "semantics": "Declares runtime dependency edge from this app to a service/version range. flags bit0=optional, bit1=startup-critical.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "svc_dependency_status",
+    "local": "host_svc_dependency_status",
+    "declaration": "@external(\"host\", \"svc_dependency_status\") declare function host_svc_dependency_status(dependencyId:i32): i32;",
+    "category": "Service Fabric 4",
+    "semantics": "Returns dependency status: 1=satisfied, 0=missing, -1=unknown/removed.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "os_graph_snapshot_size",
+    "local": "host_os_graph_snapshot_size",
+    "declaration": "@external(\"host\", \"os_graph_snapshot_size\") declare function host_os_graph_snapshot_size(flags:i32): i32;",
+    "category": "OS Introspection",
+    "semantics": "Returns UTF-8 JSON size of caller-filtered live OS graph: installed apps, manifests, services, dependencies, health and permission summaries.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "os_graph_snapshot_read",
+    "local": "host_os_graph_snapshot_read",
+    "declaration": "@external(\"host\", \"os_graph_snapshot_read\") declare function host_os_graph_snapshot_read(flags:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "OS Introspection",
+    "semantics": "Reads live OS graph JSON. Secrets and private data are never included.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "os_capability_catalog_size",
+    "local": "host_os_capability_catalog_size",
+    "declaration": "@external(\"host\", \"os_capability_catalog_size\") declare function host_os_capability_catalog_size(): i32;",
+    "category": "OS Introspection",
+    "semantics": "Returns machine-readable capability catalog JSON byte size generated from the same ABI registry Gemini receives.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "os_capability_catalog_read",
+    "local": "host_os_capability_catalog_read",
+    "declaration": "@external(\"host\", \"os_capability_catalog_read\") declare function host_os_capability_catalog_read(outPtr:usize,outCap:i32): i32;",
+    "category": "OS Introspection",
+    "semantics": "Reads machine-readable capability/permission catalog JSON.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "notify_post",
+    "local": "host_notify_post",
+    "declaration": "@external(\"host\", \"notify_post\") declare function host_notify_post(titlePtr:usize,titleLen:i32,bodyPtr:usize,bodyLen:i32,severity:i32): i32;",
+    "category": "Notifications",
+    "semantics": "Posts OS notification and returns notification id. severity 0=info,1=success,2=warning,3=error.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "notify_remove",
+    "local": "host_notify_remove",
+    "declaration": "@external(\"host\", \"notify_remove\") declare function host_notify_remove(notificationId:i32): i32;",
+    "category": "Notifications",
+    "semantics": "Removes one OS notification.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "net_transport_capabilities",
+    "local": "host_net_transport_capabilities",
+    "declaration": "@external(\"host\", \"net_transport_capabilities\") declare function host_net_transport_capabilities(): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Raw transport capabilities: bit0 TCP, bit1 Direct Sockets, bit2 native host, bit3 stream IO, bit4 UDP. Transport never parses application protocols.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "net_transport_info_size",
+    "local": "host_net_transport_info_size",
+    "declaration": "@external(\"host\", \"net_transport_info_size\") declare function host_net_transport_info_size(): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Returns byte size of transport diagnostics JSON (backend, IWA/direct-socket availability, packet ownership guarantees).",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "net_transport_info_read",
+    "local": "host_net_transport_info_read",
+    "declaration": "@external(\"host\", \"net_transport_info_read\") declare function host_net_transport_info_read(outPtr:usize,outCap:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Reads transport diagnostics JSON. Contains no payload data and performs no protocol parsing.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "tcp_set_receive_limit",
+    "local": "host_tcp_set_receive_limit",
+    "declaration": "@external(\"host\", \"tcp_set_receive_limit\") declare function host_tcp_set_receive_limit(socketId:i32,maxBufferedBytes:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Sets owner socket receive backpressure limit; returns accepted byte limit.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "udp_open",
+    "local": "host_udp_open",
+    "declaration": "@external(\"host\", \"udp_open\") declare function host_udp_open(hPtr:usize,hLen:i32,port:i32,flags:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Opens owner-bound connected UDP datagram transport through Direct Sockets/native bridge. Payload remains opaque.",
+    "asyncModel": "async-callback/poll"
+  },
+  {
+    "name": "udp_state",
+    "local": "host_udp_state",
+    "declaration": "@external(\"host\", \"udp_state\") declare function host_udp_state(socketId:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Returns owner UDP socket state.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "udp_send",
+    "local": "host_udp_send",
+    "declaration": "@external(\"host\", \"udp_send\") declare function host_udp_send(socketId:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Sends one opaque UDP datagram.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "udp_receive",
+    "local": "host_udp_receive",
+    "declaration": "@external(\"host\", \"udp_receive\") declare function host_udp_receive(socketId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Reads one opaque UDP datagram payload into WASM memory.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "udp_pending",
+    "local": "host_udp_pending",
+    "declaration": "@external(\"host\", \"udp_pending\") declare function host_udp_pending(socketId:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Returns queued UDP payload bytes for owner socket.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "udp_close",
+    "local": "host_udp_close",
+    "declaration": "@external(\"host\", \"udp_close\") declare function host_udp_close(socketId:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Closes owner UDP socket.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "udp_error_size",
+    "local": "host_udp_error_size",
+    "declaration": "@external(\"host\", \"udp_error_size\") declare function host_udp_error_size(socketId:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Returns UTF-8 UDP transport error size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "udp_read_error",
+    "local": "host_udp_read_error",
+    "declaration": "@external(\"host\", \"udp_read_error\") declare function host_udp_read_error(socketId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Transparent Network Transport",
+    "semantics": "Reads UDP transport error text.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "crypto_capabilities",
+    "local": "host_crypto_capabilities",
+    "declaration": "@external(\"host\", \"crypto_capabilities\") declare function host_crypto_capabilities(): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Returns audited primitive capability bits: CSPRNG, P-256 ECDH, AES-128-GCM, SPKI signature verification and public trust anchors. No TLS parsing occurs in the OS.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "crypto_random",
+    "local": "host_crypto_random",
+    "declaration": "@external(\"host\", \"crypto_random\") declare function host_crypto_random(outPtr:usize,outLen:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Fills owner memory with CSPRNG bytes from Web Crypto getRandomValues.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "crypto_p256_generate",
+    "local": "host_crypto_p256_generate",
+    "declaration": "@external(\"host\", \"crypto_p256_generate\") declare function host_crypto_p256_generate(): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Starts owner-bound ephemeral P-256 ECDH key generation. Result is key id (u32 BE) plus uncompressed public point.",
+    "asyncModel": "async-poll/callback"
+  },
+  {
+    "name": "crypto_p256_derive",
+    "local": "host_crypto_p256_derive",
+    "declaration": "@external(\"host\", \"crypto_p256_derive\") declare function host_crypto_p256_derive(keyId:i32,peerPtr:usize,peerLen:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Starts ECDH deriveBits using an owner key handle and peer SEC1 public point.",
+    "asyncModel": "async-poll/callback"
+  },
+  {
+    "name": "crypto_key_release",
+    "local": "host_crypto_key_release",
+    "declaration": "@external(\"host\", \"crypto_key_release\") declare function host_crypto_key_release(keyId:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Destroys an owner-bound non-exported cryptographic key handle.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "crypto_aes_gcm_encrypt",
+    "local": "host_crypto_aes_gcm_encrypt",
+    "declaration": "@external(\"host\", \"crypto_aes_gcm_encrypt\") declare function host_crypto_aes_gcm_encrypt(keyPtr:usize,keyLen:i32,ivPtr:usize,ivLen:i32,aadPtr:usize,aadLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Starts AES-128-GCM seal over caller-owned bytes and returns ciphertext with 128-bit tag.",
+    "asyncModel": "async-poll/callback"
+  },
+  {
+    "name": "crypto_aes_gcm_decrypt",
+    "local": "host_crypto_aes_gcm_decrypt",
+    "declaration": "@external(\"host\", \"crypto_aes_gcm_decrypt\") declare function host_crypto_aes_gcm_decrypt(keyPtr:usize,keyLen:i32,ivPtr:usize,ivLen:i32,aadPtr:usize,aadLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Starts authenticated AES-128-GCM open. Authentication failure is an operation error with no plaintext.",
+    "asyncModel": "async-poll/callback"
+  },
+  {
+    "name": "crypto_verify_spki",
+    "local": "host_crypto_verify_spki",
+    "declaration": "@external(\"host\", \"crypto_verify_spki\") declare function host_crypto_verify_spki(algorithm:i32,spkiPtr:usize,spkiLen:i32,sigPtr:usize,sigLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Starts signature verification using DER SubjectPublicKeyInfo. 1/2/3 are RSA-PSS, ECDSA and RSA-PKCS1 with SHA-256; 4/5/6 are SHA-384; 7/8/9 are RSA-PKCS1, RSA-PSS and ECDSA with SHA-512.",
+    "asyncModel": "async-poll/callback"
+  },
+  {
+    "name": "crypto_op_state",
+    "local": "host_crypto_op_state",
+    "declaration": "@external(\"host\", \"crypto_op_state\") declare function host_crypto_op_state(opId:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Returns owner crypto operation state: 0 pending, 1 complete, negative error.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "crypto_op_size",
+    "local": "host_crypto_op_size",
+    "declaration": "@external(\"host\", \"crypto_op_size\") declare function host_crypto_op_size(opId:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Returns completed crypto result size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "crypto_op_read",
+    "local": "host_crypto_op_read",
+    "declaration": "@external(\"host\", \"crypto_op_read\") declare function host_crypto_op_read(opId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Copies a completed owner crypto result into WASM memory.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "crypto_op_error_size",
+    "local": "host_crypto_op_error_size",
+    "declaration": "@external(\"host\", \"crypto_op_error_size\") declare function host_crypto_op_error_size(opId:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Returns owner crypto operation error text size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "crypto_op_read_error",
+    "local": "host_crypto_op_read_error",
+    "declaration": "@external(\"host\", \"crypto_op_read_error\") declare function host_crypto_op_read_error(opId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Reads owner crypto operation error text.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "crypto_op_release",
+    "local": "host_crypto_op_release",
+    "declaration": "@external(\"host\", \"crypto_op_release\") declare function host_crypto_op_release(opId:i32): i32;",
+    "category": "Cryptographic Primitives",
+    "semantics": "Zeroes and releases an owner crypto operation result.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "trust_anchor_count",
+    "local": "host_trust_anchor_count",
+    "declaration": "@external(\"host\", \"trust_anchor_count\") declare function host_trust_anchor_count(): i32;",
+    "category": "Public Trust Store",
+    "semantics": "Returns bundled public root count. The WASM application remains responsible for X.509 path and hostname validation.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "trust_anchor_size",
+    "local": "host_trust_anchor_size",
+    "declaration": "@external(\"host\", \"trust_anchor_size\") declare function host_trust_anchor_size(index:i32): i32;",
+    "category": "Public Trust Store",
+    "semantics": "Returns DER byte size for one public root certificate.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "trust_anchor_read",
+    "local": "host_trust_anchor_read",
+    "declaration": "@external(\"host\", \"trust_anchor_read\") declare function host_trust_anchor_read(index:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Public Trust Store",
+    "semantics": "Copies one DER public root certificate; no validation decision is made by the OS.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ct_log_count",
+    "local": "host_ct_log_count",
+    "declaration": "@external(\"host\", \"ct_log_count\") declare function host_ct_log_count(): i32;",
+    "category": "Public Trust Store",
+    "semantics": "Returns the bundled public Certificate Transparency log metadata count; the WASM application verifies SCT signatures and policy.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ct_log_id_read",
+    "local": "host_ct_log_id_read",
+    "declaration": "@external(\"host\", \"ct_log_id_read\") declare function host_ct_log_id_read(index:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Public Trust Store",
+    "semantics": "Copies the 32-byte public CT log id for one metadata entry.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ct_log_key_size",
+    "local": "host_ct_log_key_size",
+    "declaration": "@external(\"host\", \"ct_log_key_size\") declare function host_ct_log_key_size(index:i32): i32;",
+    "category": "Public Trust Store",
+    "semantics": "Returns DER SubjectPublicKeyInfo size for one public CT log.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ct_log_key_read",
+    "local": "host_ct_log_key_read",
+    "declaration": "@external(\"host\", \"ct_log_key_read\") declare function host_ct_log_key_read(index:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Public Trust Store",
+    "semantics": "Copies DER SubjectPublicKeyInfo for one public CT log; no SCT decision is made by the OS.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ct_log_operator",
+    "local": "host_ct_log_operator",
+    "declaration": "@external(\"host\", \"ct_log_operator\") declare function host_ct_log_operator(index:i32): i32;",
+    "category": "Public Trust Store",
+    "semantics": "Returns a stable operator identifier used by WASM CT diversity policy.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ct_log_start_ms",
+    "local": "host_ct_log_start_ms",
+    "declaration": "@external(\"host\", \"ct_log_start_ms\") declare function host_ct_log_start_ms(index:i32): f64;",
+    "category": "Public Trust Store",
+    "semantics": "Returns the inclusive temporal interval start for a CT log, or zero.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ct_log_end_ms",
+    "local": "host_ct_log_end_ms",
+    "declaration": "@external(\"host\", \"ct_log_end_ms\") declare function host_ct_log_end_ms(index:i32): f64;",
+    "category": "Public Trust Store",
+    "semantics": "Returns the exclusive temporal interval end for a CT log, or zero.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "ct_log_state",
+    "local": "host_ct_log_state",
+    "declaration": "@external(\"host\", \"ct_log_state\") declare function host_ct_log_state(index:i32): i32;",
+    "category": "Public Trust Store",
+    "semantics": "Returns public CT log state: 1 usable, 2 qualified, 3 readonly, 0 unsupported/retired.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "log",
+    "local": "host_legacy_log",
+    "declaration": "@external(\"host\", \"log\") declare function host_legacy_log(value:i32): void;",
+    "category": "Logging",
+    "semantics": "Legacy numeric logging compatibility import; prefer log_i32/log_utf8.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "console_log",
+    "local": "host_console_log",
+    "declaration": "@external(\"host\", \"console_log\") declare function host_console_log(ptr:usize,len:i32): void;",
+    "category": "Logging",
+    "semantics": "Legacy UTF-8 console logging compatibility import; prefer log_utf8.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "js_realm_create",
+    "local": "host_js_realm_create",
+    "declaration": "@external(\"host\", \"js_realm_create\") declare function host_js_realm_create(ownerId:i32): i32;",
+    "category": "Isolated Script Runtime",
+    "semantics": "Creates a network-denied ECMAScript worker realm owned by the calling WASM runtime.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "js_realm_set_dom",
+    "local": "host_js_realm_set_dom",
+    "declaration": "@external(\"host\", \"js_realm_set_dom\") declare function host_js_realm_set_dom(realmId:i32,jsonPtr:usize,jsonLen:i32): i32;",
+    "category": "Isolated Script Runtime",
+    "semantics": "Replaces the realm virtual DOM snapshot. The realm has no independent network capability.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "js_realm_eval",
+    "local": "host_js_realm_eval",
+    "declaration": "@external(\"host\", \"js_realm_eval\") declare function host_js_realm_eval(realmId:i32,scriptPtr:usize,scriptLen:i32,sourcePtr:usize,sourceLen:i32): i32;",
+    "category": "Isolated Script Runtime",
+    "semantics": "Queues ECMAScript evaluation in the network-denied realm and returns a job id.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "js_realm_dispatch",
+    "local": "host_js_realm_dispatch",
+    "declaration": "@external(\"host\", \"js_realm_dispatch\") declare function host_js_realm_dispatch(realmId:i32,nodeUid:i32,eventPtr:usize,eventLen:i32): i32;",
+    "category": "Isolated Script Runtime",
+    "semantics": "Dispatches an owner-approved DOM event into one virtual node; it cannot originate network I/O.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "js_event_size",
+    "local": "host_js_event_size",
+    "declaration": "@external(\"host\", \"js_event_size\") declare function host_js_event_size(realmId:i32): i32;",
+    "category": "Isolated Script Runtime",
+    "semantics": "Returns the next owner realm event JSON byte size, zero if empty.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "js_event_read",
+    "local": "host_js_event_read",
+    "declaration": "@external(\"host\", \"js_event_read\") declare function host_js_event_read(realmId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Isolated Script Runtime",
+    "semantics": "Pops the next owner realm console, error, completion or DOM mutation event.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "js_realm_destroy",
+    "local": "host_js_realm_destroy",
+    "declaration": "@external(\"host\", \"js_realm_destroy\") declare function host_js_realm_destroy(realmId:i32): i32;",
+    "category": "Isolated Script Runtime",
+    "semantics": "Terminates and releases an owner ECMAScript worker realm.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "image_decode",
+    "local": "host_image_decode",
+    "declaration": "@external(\"host\", \"image_decode\") declare function host_image_decode(dataPtr:usize,dataLen:i32,mimePtr:usize,mimeLen:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Asynchronously decodes owner-supplied image bytes without receiving a URL or network capability.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "image_draw",
+    "local": "host_image_draw",
+    "declaration": "@external(\"host\", \"image_draw\") declare function host_image_draw(handle:i32,bufPtr:usize,destW:i32,destH:i32,dx:i32,dy:i32,dw:i32,dh:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Alpha-composites a decoded owner image into the caller framebuffer.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "image_release",
+    "local": "host_image_release",
+    "declaration": "@external(\"host\", \"image_release\") declare function host_image_release(handle:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Releases one decoded image owned by the calling runtime.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "web_renderer_create",
+    "local": "host_web_renderer_create",
+    "declaration": "@external(\"host\", \"web_renderer_create\") declare function host_web_renderer_create(ownerId:i32,urlPtr:usize,urlLen:i32,htmlPtr:usize,htmlLen:i32,x:i32,y:i32,w:i32,h:i32,viewW:i32,viewH:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Creates a network-denied WebView render surface; Tauri maps owner-supplied bytes to one stable localhost origin partition per target origin.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "web_renderer_resource",
+    "local": "host_web_renderer_resource",
+    "declaration": "@external(\"host\", \"web_renderer_resource\") declare function host_web_renderer_resource(rendererId:i32,urlPtr:usize,urlLen:i32,mimePtr:usize,mimeLen:i32,dataPtr:usize,dataLen:i32,kind:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Transfers one owner-fetched subresource into the isolated renderer; the renderer receives no socket or URL-fetch capability.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "web_renderer_commit",
+    "local": "host_web_renderer_commit",
+    "declaration": "@external(\"host\", \"web_renderer_commit\") declare function host_web_renderer_commit(rendererId:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Commits owner bytes to a stable native origin with external network denied; non-Tauri contexts explicitly fall back to opaque srcdoc.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "web_renderer_set_bounds",
+    "local": "host_web_renderer_set_bounds",
+    "declaration": "@external(\"host\", \"web_renderer_set_bounds\") declare function host_web_renderer_set_bounds(rendererId:i32,x:i32,y:i32,w:i32,h:i32,viewW:i32,viewH:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Positions the renderer over an owner-defined framebuffer rectangle.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "web_renderer_show",
+    "local": "host_web_renderer_show",
+    "declaration": "@external(\"host\", \"web_renderer_show\") declare function host_web_renderer_show(rendererId:i32,visible:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Shows or hides one owner render surface without changing its resource authority.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "web_renderer_event_size",
+    "local": "host_web_renderer_event_size",
+    "declaration": "@external(\"host\", \"web_renderer_event_size\") declare function host_web_renderer_event_size(rendererId:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Returns the next isolated renderer event JSON size.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "web_renderer_event_read",
+    "local": "host_web_renderer_event_read",
+    "declaration": "@external(\"host\", \"web_renderer_event_read\") declare function host_web_renderer_event_read(rendererId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Reads navigation, console, error, lifecycle or blocked-network events emitted by the isolated renderer.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "web_renderer_request_body_size",
+    "local": "host_web_renderer_request_body_size",
+    "declaration": "@external(\"host\", \"web_renderer_request_body_size\") declare function host_web_renderer_request_body_size(rendererId:i32,requestId:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Returns the byte size of a renderer request body captured without granting renderer network authority.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "web_renderer_request_body_read",
+    "local": "host_web_renderer_request_body_read",
+    "declaration": "@external(\"host\", \"web_renderer_request_body_read\") declare function host_web_renderer_request_body_read(rendererId:i32,requestId:i32,outPtr:usize,outCap:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Copies a captured fetch/XHR body into the owner WASM so its packet stack can construct the request.",
+    "asyncModel": "sync"
+  },
+  {
+    "name": "web_renderer_open_devtools",
+    "local": "host_web_renderer_open_devtools",
+    "declaration": "@external(\"host\", \"web_renderer_open_devtools\") declare function host_web_renderer_open_devtools(rendererId:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Requests the native Tauri/WebView2 inspector for the current renderer without changing network ownership.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "web_renderer_fetch_respond",
+    "local": "host_web_renderer_fetch_respond",
+    "declaration": "@external(\"host\", \"web_renderer_fetch_respond\") declare function host_web_renderer_fetch_respond(rendererId:i32,requestId:i32,status:i32,mimePtr:usize,mimeLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Completes a renderer fetch request using status, MIME and body bytes obtained by the owner WASM HTTP stack.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "web_renderer_protocol_dispatch",
+    "local": "host_web_renderer_protocol_dispatch",
+    "declaration": "@external(\"host\", \"web_renderer_protocol_dispatch\") declare function host_web_renderer_protocol_dispatch(rendererId:i32,jsonPtr:usize,jsonLen:i32,dataPtr:usize,dataLen:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Dispatches protocol events and owner-supplied bytes from a WASM protocol engine into its isolated renderer.",
+    "asyncModel": "async-callback"
+  },
+  {
+    "name": "web_renderer_destroy",
+    "local": "host_web_renderer_destroy",
+    "declaration": "@external(\"host\", \"web_renderer_destroy\") declare function host_web_renderer_destroy(rendererId:i32): i32;",
+    "category": "Isolated Renderer",
+    "semantics": "Destroys one render surface and revokes every object URL created from owner bytes.",
+    "asyncModel": "sync"
+  }
+]

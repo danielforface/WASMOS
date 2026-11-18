@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+target/
+src-tauri/gen/
+examples/nebula/public/vfs.wasm
+examples/nebula/public/vfs.wat
+hosts/webview2/bin/
+hosts/webview2/obj/
+.DS_Store
+*.gguf
+*.flybrain
+.env
+.env.*
+!*.example

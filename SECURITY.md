@@ -1,0 +1,9 @@
+# Security boundary
+
+Use this developer preview with trusted local WASM applications and test sites. It is not an audited browser for production credentials. Report security concerns privately to the repository owner (GitHub private vulnerability reporting if enabled); do not attach user data, keys, or cookies to an issue.
+
+- The browser application owns HTTP/TLS, origin policy and its service declarations. Host raw transports move bytes. The desktop bridge serves registered bytes on loopback; its synthetic origin is not the site's public HTTPS origin.
+- The packet engine is a separate, **unprivileged** WASI guest. Give each origin, tab and authorized peer a separate instance. Its input and output are bounded and tied to one peer. Metadata such as the initiating origin and the authorized destination must come from the trusted browser, not page messages. Never give a page the driver API.
+- Do not enable native WebTransport or WebRTC as a fallback. Raw UDP consent, ICE/TURN policy, capture, codecs, revocation and cleanup require review before shipping the full renderer API. WHEP uses a distinct host media capability; it is not browser WebRTC.
+- The browser rejects paths without a trust anchor and requires CertificateVerify before Finished on a certificate handshake. The trust profile is a deliberately restricted intersection, not a full recreation of Firefox policy. CRL network failures in the original client may soft-fail, and CT is not a complete cross-browser CT policy. Compile success does not establish protocol completeness.
+- Bind the Studio only to loopback for development. The native runtime and Service Fabric are still under review for per-app permissions, cookie/tab access, subscription visibility and process isolation. Do not run unknown third-party applications with raw-network or other privileged grants.

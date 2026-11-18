@@ -1,0 +1,83 @@
+{
+  "format": "FLYBRAIN/1",
+  "graph_kind": "external_user_supplied",
+  "dataset": "FlyWire v783 / Zenodo 10676866; annotations commit 8587524c1748ce5ef2080822a2fc890fc03bf597",
+  "neurons": 139255,
+  "edges": 16847997,
+  "synapse_count": 54492922,
+  "mappings": 14303,
+  "mapping_mode": "uncalibrated_annotation_proxy",
+  "proxy_summary": {
+    "vision_left": 5865,
+    "vision_right": 5450,
+    "auditory": 390,
+    "dn_left": 646,
+    "dn_right": 649,
+    "dn_mid": 8
+  },
+  "stats": {
+    "synapses": 54492922,
+    "zero_effect_edges": 916138
+  },
+  "nt_edge_counts": {
+    "GABA": 3565868,
+    "ACH": 9078530,
+    "GLUT": 3287461,
+    "OCT": 194237,
+    "SER": 255055,
+    "DA": 465114,
+    "UNKNOWN": 1732
+  },
+  "nt_synapse_counts": {
+    "GABA": 12692918,
+    "ACH": 30378547,
+    "GLUT": 9682956,
+    "OCT": 331146,
+    "SER": 636852,
+    "DA": 739697,
+    "UNKNOWN": 30806
+  },
+  "sign_policy": {
+    "GABA": -1,
+    "ACH": 1,
+    "GLUT": -1,
+    "OCT": 0,
+    "SER": 0,
+    "DA": 0,
+    "UNKNOWN": 0,
+    "": 0,
+    "ACETYLCHOLINE": 1,
+    "GLUTAMATE": -1,
+    "DOPAMINE": 0,
+    "SEROTONIN": 0,
+    "OCTOPAMINE": 0
+  },
+  "weight_scale": 0.02,
+  "default_delay_ms": 1,
+  "tau_mem_ms": 20.0,
+  "tau_syn_ms": 5.0,
+  "threshold": 1.0,
+  "refractory_ms": 2,
+  "synapse_gain": 4.0,
+  "input_gain": 3.0,
+  "audio_gain": 1.0,
+  "source_sha256": {
+    "neurons": "7c7b7e818e9232e5ab64793d52ba20574dbe9da3a6509fbc74193b0f259a01be",
+    "connections": "24f960ae3e7d4f8cd30db3b62e99fb5179cc3d1e76d8c155bfb441e9737d3faf"
+  },
+  "mapping_sha256": null,
+  "annotation_sha256": "9a4f8b2f843196074431ebd7cd883536afa1be86c8a4ce90970441e8be81d1be",
+  "assumptions": [
+    "Dimensionless common LIF parameters, fixed 1-ms integration",
+    "Signed current impulses derived from counts and dominant per-edge neurotransmitter prediction",
+    "GABA and glutamate inhibitory; ACh excitatory; receptor-specific effects unknown",
+    "DA/SER/OCT/unknown connections retained with zero current effect unless overridden",
+    "All edge rows preserved, including parallel neuropil edges; no synapse-count threshold",
+    "Retinal channels assigned by sorted ID within each side; not measured retinotopy",
+    "Auditory frequency assignment and descending-neuron body readout are uncalibrated proxies",
+    "Synapse gain 4 and input gain 3 were selected for software response, not biological fitting",
+    "No VNC, muscles, calibrated antenna, plasticity or validated whole-animal behavior"
+  ],
+  "output_bytes": 153534230,
+  "output_sha256": "09d80c2a16bf4102f5c051254118019cf6f64e587944f90e9470d778f2cecda6"
+}

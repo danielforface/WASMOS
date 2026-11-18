@@ -1,0 +1,29 @@
+{
+  "name": "wasmos-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "transport:build": "node tools/transport.mjs",
+    "transport:test": "node tools/transport.mjs --test",
+    "test:studio": "node tools/smoke.mjs",
+    "desktop": "tauri dev",
+    "desktop:build": "tauri build",
+    "serve": "node tools/serve.mjs"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "6.4.0",
+    "@tauri-apps/cli": "2.12.6",
+    "assemblyscript": "0.28.20",
+    "hls.js": "1.6.15",
+    "monaco-editor": "0.38.0",
+    "onnxruntime-web": "1.27.0",
+    "playwright-core": "1.58.2",
+    "tailwindcss": "3.4.17"
+  }
+}
