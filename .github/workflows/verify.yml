@@ -35,7 +35,12 @@ jobs:
         with:
           go-version-file: transport/go.mod
           cache-dependency-path: transport/go.sum
+      - run: npm ci
       - run: npm run transport:test
+      - name: Exchange RTC packets between two real Chromium Web Workers
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: node tools/transport-chrome.mjs
   native-host:
     runs-on: windows-latest
     timeout-minutes: 35

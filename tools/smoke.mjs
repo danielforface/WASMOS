@@ -12,7 +12,9 @@ try{
  for(let i=0;i<50;i++){try{if((await fetch(url)).ok)break}catch{}await delay(100);}
  const executablePath=process.env.CHROME_PATH||['/usr/bin/chromium','/usr/bin/google-chrome'].find(existsSync);
  browser=await chromium.launch({executablePath,headless:true,args:['--disable-dev-shm-usage']});
- const ctx=await browser.newContext({serviceWorkers:'block'}),page=await ctx.newPage(),errors=[],external=[],packageRequests=[];
+ // A fresh profile has no registrations. Playwright's optional SW-blocking init script
+ // reads navigator.serviceWorker inside *every* frame, which throws in an opaque panel.
+ const ctx=await browser.newContext(),page=await ctx.newPage(),errors=[],external=[],packageRequests=[];
  let offline=false;
  page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
  await ctx.route(/^https?:/,async route=>{const path=route.request().url();if(new URL(path).origin===url)return route.continue();
@@ -34,6 +36,8 @@ try{
  await page.waitForFunction(()=>WASM_OS_V31.graph().services.some(s=>s.name==='os.time'));
  const clock=page.frameLocator('iframe[title="Clock"]');assert.ok(await clock.locator('time').textContent());
  assert.equal(await clock.locator('html').evaluate(()=>location.origin),'null'); // srcdoc URL itself has opaque origin
+ assert.equal(await clock.locator('html').evaluate(()=>{try{return !navigator.serviceWorker;}catch(e){return e.name==='SecurityError';}}),true);
+ assert.equal(await clock.locator('html').evaluate(()=>{try{void parent.document;return false;}catch(e){return e.name==='SecurityError';}}),true);
  await page.locator('#package-desktop-bar [data-browse-extras]').click();
  const list=page.locator('[data-catalog-list]');await list.locator('input[value="wasmos.extra.fibonacci"]').check();await list.getByRole('button',{name:'התקנת הבחירה'}).click();
  await page.locator('[data-package-id="wasmos.extra.fibonacci"]').waitFor();assert.deepEqual(packageRequests.filter(p=>p.startsWith('packages/extra/')),['packages/extra/fibonacci/main.wasm']);
