@@ -1,0 +1,3 @@
+<h1>Service Graph</h1><p>Live registrations, dependency edges and in-flight calls.</p><pre></pre><script>
+async function refresh(){try{const g=await wasmos.call('graph');document.querySelector('pre').textContent=['PROVIDERS',...g.services.map(s=>s.provider+' → '+s.name+'@'+s.version),'','DEPENDENCIES',...g.dependencies.map(d=>d.appId+' → '+d.service+(d.satisfied?' ✓':' (missing)')),'','CONNECTIONS',...g.connections.map(c=>c.from+' → '+c.service+' → '+c.to)].join('\n');}catch(e){document.querySelector('pre').textContent=e.message;}}refresh();setInterval(refresh,2000);
+</script>

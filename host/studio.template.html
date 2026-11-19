@@ -262,19 +262,7 @@
                     </div>
                 </div>
 
-                <!-- Preset Examples Card -->
-                <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1.5">
-                    <label class="text-[11px] font-bold text-slate-400 block">דוגמאות מוכנות מראש:</label>
-                    <select id="sampleSelect" class="w-full bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded-lg p-2 focus:border-cyan-400 outline-none transition cursor-pointer">
-                        <option value="fibonacci">🧬 חישוב פיבונאצ'י (בנצ'מרק)</option>
-                        <option value="bouncing_balls">🏀 גרפיקה וכדורים בזיכרון WASM</option>
-                        <option value="mandelbrot">🌌 פרקטל מנדלברוט (מקבילי)</option>
-                        <option value="game_of_life">🦠 Conway's Game of Life</option>
-                        <option value="http_client">🌐 HTTP Network Client (אינטרנט חי)</option>
-                        <option value="rtsp_player">📹 Live Camera / WHEP Player</option>
-                    </select>
-                </div>
-
+                <div data-package-controls class="space-y-2"></div>
                 <!-- Hardware & Storage Actions -->
                 <div class="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
                     <span class="text-[11px] font-bold text-slate-400 flex items-center gap-1.5">
@@ -582,225 +570,6 @@
         </div>
     </footer>
 
-    <script>
-        // Default AssemblyScript Code Templates
-        const CODE_SAMPLES = {
-            fibonacci: `(module
-  (func $fib (param $n i32) (result i32)
-    (local $a i32)
-    (local $b i32)
-    (local $c i32)
-    (local $i i32)
-    (if (i32.le_s (local.get $n) (i32.const 1))
-      (then (return (local.get $n)))
-    )
-    (local.set $a (i32.const 0))
-    (local.set $b (i32.const 1))
-    (local.set $i (i32.const 2))
-    (block $break
-      (loop $top
-        (br_if $break (i32.gt_s (local.get $i) (local.get $n)))
-        (local.set $c (i32.add (local.get $a) (local.get $b)))
-        (local.set $a (local.get $b))
-        (local.set $b (local.get $c))
-        (local.set $i (i32.add (local.get $i) (i32.const 1)))
-        (br $top)
-      )
-    )
-    (return (local.get $b))
-  )
-  (export "fibonacci" (func $fib))
-)`,
-
-            bouncing_balls: `// WASM High Performance Graphics Buffer Engine
-const WIDTH: i32 = 400;
-const HEIGHT: i32 = 300;
-const BALL_COUNT: i32 = 40;
-
-// Linear memory buffer for pixel RGBA data (400 * 300 * 4 bytes)
-export const pixels = new Uint8Array(WIDTH * HEIGHT * 4);
-
-// Ball state arrays
-let px = new Float32Array(BALL_COUNT);
-let py = new Float32Array(BALL_COUNT);
-let vx = new Float32Array(BALL_COUNT);
-let vy = new Float32Array(BALL_COUNT);
-let radius = new Float32Array(BALL_COUNT);
-let initialized: boolean = false;
-
-function init(): void {
-  for (let i = 0; i < BALL_COUNT; i++) {
-    px[i] = <f32>(100 + (i * 7) % (WIDTH - 50));
-    py[i] = <f32>(100 + (i * 11) % (HEIGHT - 50));
-    vx[i] = <f32>((i % 5) + 1.5) * (i % 2 == 0 ? 1.0 : -1.0);
-    vy[i] = <f32>(((i * 3) % 4) + 1.2) * (i % 3 == 0 ? 1.0 : -1.0);
-    radius[i] = <f32>(6 + (i % 8));
-  }
-  initialized = true;
-}
-
-export function renderFrame(): i32 {
-  if (!initialized) init();
-
-  // Clear canvas background to deep purple/dark blue (RGBA)
-  let len = WIDTH * HEIGHT * 4;
-  for (let i = 0; i < len; i += 4) {
-    pixels[i] = 10;     // R
-    pixels[i+1] = 14;   // G
-    pixels[i+2] = 26;   // B
-    pixels[i+3] = 255;  // A
-  }
-
-  // Update physics and draw balls into WASM linear memory
-  for (let b = 0; b < BALL_COUNT; b++) {
-    px[b] += vx[b];
-    py[b] += vy[b];
-
-    let r = radius[b];
-    if (px[b] - r < 0 || px[b] + r >= <f32>WIDTH) vx[b] *= -1.0;
-    if (py[b] - r < 0 || py[b] + r >= <f32>HEIGHT) vy[b] *= -1.0;
-
-    // Render ball to pixel buffer
-    let cx = <i32>px[b];
-    let cy = <i32>py[b];
-    let rad = <i32>r;
-
-    for (let dy = -rad; dy <= rad; dy++) {
-      for (let dx = -rad; dx <= rad; dx++) {
-        if (dx*dx + dy*dy <= rad*rad) {
-          let x = cx + dx;
-          let y = cy + dy;
-          if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
-            let idx = (y * WIDTH + x) * 4;
-            pixels[idx] = <u8>(0);                   // R
-            pixels[idx+1] = <u8>(200 + (b * 5) % 55); // G
-            pixels[idx+2] = <u8>(255);               // B
-            pixels[idx+3] = 255;                     // A
-          }
-        }
-      }
-    }
-  }
-
-  return pixels.dataStart; // Return WASM memory offset
-}
-`,
-
-            mandelbrot: `// WASM Parallel Fractal Rendering Engine
-const WIDTH: i32 = 400;
-const HEIGHT: i32 = 300;
-export const pixels = new Uint8Array(WIDTH * HEIGHT * 4);
-
-export function computeMandelbrot(zoom: f64, offsetX: f64, offsetY: f64): i32 {
-  let maxIter: i32 = 100;
-
-  for (let y: i32 = 0; y < HEIGHT; y++) {
-    for (let x: i32 = 0; x < WIDTH; x++) {
-      let zx: f64 = 0.0;
-      let zy: f64 = 0.0;
-      let cx: f64 = (x - WIDTH / 2) / (0.5 * zoom * WIDTH) + offsetX;
-      let cy: f64 = (y - HEIGHT / 2) / (0.5 * zoom * HEIGHT) + offsetY;
-
-      let iter: i32 = 0;
-      while (zx * zx + zy * zy <= 4.0 && iter < maxIter) {
-        let tmp = zx * zx - zy * zy + cx;
-        zy = 2.0 * zx * zy + cy;
-        zx = tmp;
-        iter++;
-      }
-
-      let idx = (y * WIDTH + x) * 4;
-      if (iter == maxIter) {
-        pixels[idx] = 0;
-        pixels[idx+1] = 0;
-        pixels[idx+2] = 0;
-      } else {
-        pixels[idx] = <u8>((iter * 12) % 256);
-        pixels[idx+1] = <u8>((iter * 5) % 256);
-        pixels[idx+2] = <u8>((iter * 25) % 256);
-      }
-      pixels[idx+3] = 255;
-    }
-  }
-  return pixels.dataStart;
-}
-`,
-
-            game_of_life: `// Conway's Game of Life in WASM
-const WIDTH: i32 = 100;
-const HEIGHT: i32 = 75;
-let currentGrid = new Uint8Array(WIDTH * HEIGHT);
-let nextGrid = new Uint8Array(WIDTH * HEIGHT);
-export const pixels = new Uint8Array(WIDTH * HEIGHT * 4 * 16); // 4x scaled pixel buffer
-let initialized: boolean = false;
-
-function seed(): void {
-  for (let i = 0; i < WIDTH * HEIGHT; i++) {
-    currentGrid[i] = (Math.random() > 0.7) ? 1 : 0;
-  }
-  initialized = true;
-}
-
-export function step(): i32 {
-  if (!initialized) seed();
-
-  for (let y = 0; y < HEIGHT; y++) {
-    for (let x = 0; x < WIDTH; x++) {
-      let neighbors = 0;
-      for (let dy = -1; dy <= 1; dy++) {
-        for (let dx = -1; dx <= 1; dx++) {
-          if (dx == 0 && dy == 0) continue;
-          let nx = (x + dx + WIDTH) % WIDTH;
-          let ny = (y + dy + HEIGHT) % HEIGHT;
-          neighbors += currentGrid[ny * WIDTH + nx];
-        }
-      }
-
-      let idx = y * WIDTH + x;
-      let state = currentGrid[idx];
-      if (state == 1 && (neighbors == 2 || neighbors == 3)) {
-        nextGrid[idx] = 1;
-      } else if (state == 0 && neighbors == 3) {
-        nextGrid[idx] = 1;
-      } else {
-        nextGrid[idx] = 0;
-      }
-    }
-  }
-
-  // Copy nextGrid to currentGrid
-  for (let i = 0; i < WIDTH * HEIGHT; i++) {
-    currentGrid[i] = nextGrid[i];
-  }
-
-  // Render to 4x Pixel Buffer (400x300)
-  for (let y = 0; y < HEIGHT; y++) {
-    for (let x = 0; x < WIDTH; x++) {
-      let alive = currentGrid[y * WIDTH + x] == 1;
-      let r: u8 = alive ? 0 : 15;
-      let g: u8 = alive ? 255 : 23;
-      let b: u8 = alive ? 157 : 42;
-
-      // Draw 4x4 block per cell
-      for (let py = 0; py < 4; py++) {
-        for (let px = 0; px < 4; px++) {
-          let screenX = x * 4 + px;
-          let screenY = y * 4 + py;
-          let pIdx = (screenY * (WIDTH * 4) + screenX) * 4;
-          pixels[pIdx] = r;
-          pixels[pIdx+1] = g;
-          pixels[pIdx+2] = b;
-          pixels[pIdx+3] = 255;
-        }
-      }
-    }
-  }
-
-  return pixels.dataStart;
-}
-`
-        };
-    </script>
 <script>
 (() => {
 'use strict';
@@ -2385,9 +2154,8 @@ const OS_PROCESS_SUPERVISOR={
 const OS_SYSTEM_GRAPH={
   snapshot(caller=null,flags=0){
     const apps=fileTabs.map(tab=>{const s=sessionByTab.get(tab.id);const m=tab.osManifest|| (s?OS_APP_MODEL.manifestFor(s):null);const services=s?runtimeServices(s):[];return{appId:tab.osAppId,name:tab.name,kind:m?.kind||'application',version:m?.version||'unknown',role:m?.role||'',summary:m?.summary||'',running:!!s,ready:s?.osReadyState??0,health:s?.osHealth||null,permissions:s?OS_PERMISSION_MANAGER.policySnapshot(s):null,provides:m?.provides||null,requires:m?.requires||null,services:services.map(v=>({id:v.id,name:v.name,version:v.version,load:{active:v.active,queued:v.queued,capacity:v.capacity,ewmaMs:v.ewmaMs},contract:OS_SERVICE_CONTRACTS.contractFor(v.id)}))};});
-    const builtins=OS_BUILTIN_APPS.registry.filter(x=>!fileTabs.some(t=>t.osAppId===x.id||t.osInstallMeta?.systemBuiltinId===x.id)).map(x=>({appId:x.id,name:x.name,kind:'system-app',version:x.version,role:x.role,summary:x.summary,running:true,ready:1,provides:{atoms:x.atoms||[],services:x.services||[]},services:x.services||[]}));
     const dependencies=[...OS_SERVICE_CONTRACTS.dependencies.values()].map(d=>({appId:d.appId,service:d.name,version:d.range,optional:!!(d.flags&1),critical:!!(d.flags&2),satisfied:OS_SERVICE_CONTRACTS.compatibleProviders(d.name,d.range).length>0}));const connections=[...GLOBAL_APP_SERVICE_FABRIC.requests.values()].map(q=>({requestId:q.id,from:q.requester?.tab?.osAppId||q.requester?.id,to:q.provider?.tab?.osAppId||q.provider?.id,service:q.name,state:q.state,priority:q.priority}));
-    return{schema:'wasmos.graph/1',platform:{name:'WASM OS',version:WASM_OS_PLATFORM_VERSION,abi:APP_ABI_VERSION},generatedAt:new Date().toISOString(),apps:[...builtins,...apps],dependencies,connections,services:[...GLOBAL_APP_SERVICE_FABRIC.services.values()].filter(x=>x.session?.running).map(x=>({id:x.id,name:x.name,version:x.version,providerAppId:osAppStableId(x.session),provider:x.session.tab?.name,contract:OS_SERVICE_CONTRACTS.contractFor(x.id),manifest:osJsonParse(textDecoder.decode(x.manifest||new Uint8Array(0)),null),load:{active:x.active,queued:x.queued,capacity:x.capacity,ewmaMs:x.ewmaMs}})),capabilitiesSummary:{hostAbiCount:HOST_ABI_MANIFEST.length,permissionDomains:Object.keys(OS_PERMISSION_DEFS).length}};
+    return{schema:'wasmos.graph/1',platform:{name:'WASM OS',version:WASM_OS_PLATFORM_VERSION,abi:APP_ABI_VERSION},generatedAt:new Date().toISOString(),apps:[...apps,...packageGraphNodes()],dependencies,connections,services:[...GLOBAL_APP_SERVICE_FABRIC.services.values()].filter(x=>x.session?.running).map(x=>({id:x.id,name:x.name,version:x.version,providerAppId:osAppStableId(x.session),provider:x.session.tab?.name,contract:OS_SERVICE_CONTRACTS.contractFor(x.id),manifest:osJsonParse(textDecoder.decode(x.manifest||new Uint8Array(0)),null),load:{active:x.active,queued:x.queued,capacity:x.capacity,ewmaMs:x.ewmaMs}})),capabilitiesSummary:{hostAbiCount:HOST_ABI_MANIFEST.length,permissionDomains:Object.keys(OS_PERMISSION_DEFS).length}};
   }
 };
 function buildGeminiLiveSystemContext(){const g=OS_SYSTEM_GRAPH.snapshot();const compact={platform:g.platform,installedApps:g.apps.map(a=>({id:a.appId,name:a.name,kind:a.kind,version:a.version,role:a.role,summary:a.summary,running:a.running,ready:a.ready,provides:a.provides,requires:a.requires,services:a.services?.map(s=>({name:s.name,version:s.version,contract:s.contract}))})),services:g.services.map(s=>({name:s.name,version:s.version,providerAppId:s.providerAppId,contract:s.contract,load:s.load})),dependencies:g.dependencies,liveConnections:g.connections};return`\n\n===== LIVE WASM OS SYSTEM GRAPH (AUTHORITATIVE AT REQUEST TIME) =====\n${JSON.stringify(compact,null,2)}\n===== END LIVE SYSTEM GRAPH =====\nComposition law: REUSE existing compatible capabilities/services first. Never reimplement an already available service unless the user explicitly asks for replacement. Missing reusable functionality may become a verified microservice.\n`;}
@@ -2398,83 +2166,7 @@ function buildGeminiLiveSystemContext(){const g=OS_SYSTEM_GRAPH.snapshot();const
 const OS_NOTIFICATION_CENTER={nextId:1,records:new Map(),post(session,title,body,severity=0){const id=this.nextId++;const r={id,appId:session?osAppStableId(session):'os',title:String(title||'Notification').slice(0,200),body:String(body||'').slice(0,2000),severity:severity|0,at:Date.now()};this.records.set(id,r);logConsole(`[Notification] ${r.title}: ${r.body}`,severity>=3?'error':severity===2?'warn':'info');this.renderToast(r);return id;},remove(id){return this.records.delete(id|0)?1:0;},renderToast(r){let tray=document.getElementById('wasmos-toast-tray');if(!tray){tray=document.createElement('div');tray.id='wasmos-toast-tray';tray.className='fixed bottom-12 left-3 z-[20000] w-[360px] max-w-[90vw] space-y-2 pointer-events-none';document.body.appendChild(tray);}const el=document.createElement('div');el.className='pointer-events-auto p-3 rounded-xl border border-slate-700 bg-slate-950/95 shadow-2xl text-xs';el.innerHTML=`<div class="font-bold text-cyan-300">${escapeHtml(r.title)}</div><div class="mt-1 text-slate-300">${escapeHtml(r.body)}</div>`;tray.appendChild(el);setTimeout(()=>el.remove(),5500);}}
 
 // -----------------------------------------------------------------------------
-// WASM SYSTEM BROWSER - source is embedded as an OS-owned install capsule.
-// It compiles/runs as a normal WASM application and owns HTTP/document bytes.
-// -----------------------------------------------------------------------------
-const OS_SYSTEM_BROWSER_SOURCE_B64 = '@@BROWSER_B64@@';
-function osDecodeSystemSourceB64(b64){try{return textDecoder.decode(base64ToBytes(b64));}catch(e){throw new Error('System Browser source decode failed: '+e.message);}}
-let OS_SYSTEM_BROWSER_LAUNCH_PROMISE=null;
-async function launchPacketOwnedSystemBrowser(url=''){
-  const appId='wasmos.system.browser';
-  let tab=fileTabs.find(t=>t.osInstallMeta?.systemBuiltinId===appId||t.osAppId===appId);
-  if(tab){
-    const running=sessionByTab.get(tab.id);
-    if(running?.running){running.window?.bringToFront?.();if(url)OS_BROWSER_NAV_QUEUE.push(url);return running;}
-  }
-  if(OS_SYSTEM_BROWSER_LAUNCH_PROMISE){if(url)OS_BROWSER_NAV_QUEUE.push(url);return OS_SYSTEM_BROWSER_LAUNCH_PROMISE;}
-  OS_SYSTEM_BROWSER_LAUNCH_PROMISE=(async()=>{
-    if(!tab){tab=createTabRecord({name:'system_browser_packet_owned.ts',kind:'source',content:osDecodeSystemSourceB64(OS_SYSTEM_BROWSER_SOURCE_B64)});tab.osAppId=appId;tab.osInstallMeta={installedAt:Date.now(),source:'wasmos-system-builtin',trust:'system',systemBuiltinId:appId,hiddenDesktopDuplicate:true};fileTabs.push(tab);renderTabs();renderDesktopIcons();}
-    if(url)OS_BROWSER_NAV_QUEUE.push(url);
-    const binary=await compileTab(tab,{log:true});
-    const old=sessionByTab.get(tab.id);if(old)old.stop('system browser restarted');
-    const runtime=new RuntimeSession(tab,binary,tab.content);await runtime.launch();
-    const s=sessionByTab.get(tab.id);
-    if(!s?.running)throw new Error('System Browser failed to start');
-    s.window?.bringToFront?.();
-    await flushSystemBrowserNavigationQueue();
-    return s;
-  })().finally(()=>{OS_SYSTEM_BROWSER_LAUNCH_PROMISE=null;});
-  return OS_SYSTEM_BROWSER_LAUNCH_PROMISE;
-}
-const OS_BROWSER_NAV_QUEUE=[];
-async function flushSystemBrowserNavigationQueue(){
-  while(OS_BROWSER_NAV_QUEUE.length){const url=OS_BROWSER_NAV_QUEUE.shift();try{await OS_INTERNAL_SERVICE_CLIENT.request('os.browser.engine','^1.0.0','navigate',{url},4000);}catch(e){logConsole('[Browser] queued navigation failed: '+e.message,'warn');break;}}
-}
-
-// -----------------------------------------------------------------------------
-// Built-in OS applications. These are OS code, not samples, and can also expose
-// system-level semantic capabilities to Gemini through the graph.
-// -----------------------------------------------------------------------------
-const OS_BUILTIN_APPS={
-  state:{},
-  registry:[
-    {id:'wasmos.system.clock',name:'Clock',version:'1.0.0',icon:'fa-clock',color:'text-cyan-300',role:'Time and timer utility',summary:'Clock, stopwatch and timer system application.',atoms:['time.now','time.format','timer.stopwatch'],services:[{name:'os.time',version:'1.0.0'}],launch:'clock'},
-    {id:'wasmos.system.calculator',name:'Calculator',version:'1.0.0',icon:'fa-calculator',color:'text-emerald-300',role:'Mathematics utility',summary:'Local calculator and math expression utility.',atoms:['math.calculate'],services:[{name:'os.math',version:'1.0.0'}],launch:'calculator'},
-    {id:'wasmos.system.recorder',name:'Recorder',version:'1.0.0',icon:'fa-microphone',color:'text-rose-300',role:'Audio capture utility',summary:'User-gesture controlled microphone recorder.',atoms:['media.audio.record'],services:[],launch:'recorder'},
-    {id:'wasmos.system.camera',name:'Camera',version:'1.0.0',icon:'fa-camera',color:'text-amber-300',role:'Camera utility',summary:'Local camera viewer and snapshot utility.',atoms:['media.camera.view'],services:[],launch:'camera'},
-    {id:'wasmos.system.browser',name:'Browser',version:'6.0.0',icon:'fa-globe',color:'text-blue-300',role:'Packet-owned browser and reusable web platform provider',summary:'WASM owns TLS 1.3, certificate policy, pooled HTTP/2, CORS, resources and RFC 6455. Tauri supplies stable networkless origin partitions for persistent storage and Service Workers; Chromium renders only.',atoms:['web.open','web.navigate','web.tabs','http.client.raw','https.client.tls13','http2.pool.multiplexed','web.origin.cors','web.resources.parallel','web.renderer.native-origin','web.storage.origin-persistent','web.service-worker','websocket.rfc6455.packet-owned'],services:[{name:'os.browser',version:'1.0.0'},{name:'os.browser.engine',version:'4.0.0'},{name:'os.url',version:'1.0.0'},{name:'os.origin.policy',version:'1.0.0'},{name:'os.http.client',version:'2.0.0'},{name:'os.tls.client',version:'2.0.0'},{name:'os.web.resource',version:'1.0.0'},{name:'os.browser.tabs',version:'1.0.0'},{name:'os.browser.bookmarks',version:'1.0.0'},{name:'os.cookie.jar',version:'1.0.0'},{name:'os.web.renderer',version:'2.0.0'}],launch:'browser'},
-    {id:'wasmos.system.ai',name:'AI Engine',version:'1.0.0',icon:'fa-brain',color:'text-purple-300',role:'AI runtime control plane',summary:'Discovers and monitors installed ai.inference providers. Model engine remains replaceable application service.',atoms:['ai.provider.discover','ai.provider.route'],services:[{name:'os.ai.registry',version:'1.0.0'}],launch:'ai'},
-    {id:'wasmos.system.files',name:'Files',version:'1.0.0',icon:'fa-folder-tree',color:'text-yellow-300',role:'Virtual filesystem manager',summary:'Browse WASM OS VFS, user folders, app data and shared files.',atoms:['files.browse','files.inspect'],services:[],launch:'files'},
-    {id:'wasmos.system.terminal',name:'Terminal',version:'1.0.0',icon:'fa-terminal',color:'text-green-300',role:'OS diagnostic shell',summary:'Read-only/admin diagnostics for apps, services, graph and VFS.',atoms:['os.diagnostics'],services:[],launch:'terminal'},
-    {id:'wasmos.system.control',name:'OS Control Center',version:'1.0.0',icon:'fa-sliders',color:'text-teal-300',role:'System administration',summary:'Applications, services, permissions, health, dependencies and system graph.',services:[],launch:'control'},
-    {id:'wasmos.system.services',name:'Service Graph',version:'1.0.0',icon:'fa-diagram-project',color:'text-indigo-300',role:'Developer service graph',summary:'Visual/live map of providers, consumers and dependency edges.',services:[],launch:'graph'},
-    {id:'wasmos.system.microservices',name:'Microservices',version:'1.0.0',icon:'fa-cubes-stacked',color:'text-orange-300',role:'Headless capability manager',summary:'Verified headless microservices, contracts, health and dependency impact.',services:[],launch:'microservices'}
-  ],
-  captureUiState(){this.state.browserUrl=document.getElementById('os-browser-url')?.value||this.state.browserUrl||'';this.state.calculatorExpression=document.getElementById('os-calc-in')?.value||this.state.calculatorExpression||'';return this.state;},snapshotState(){this.captureUiState();return osCloneJson(this.state)||{};},restoreState(s){this.state=s&&typeof s==='object'?s:{};},
-  launch(id){const a=this.registry.find(x=>x.id===id);if(!a)return;this[`open_${a.launch}`]?.();},
-  win(id,title,html,w=640,h=480,onRender=null){const ex=floatingWindows.get(id);if(ex){ex.bringToFront();return ex;}return new FloatingWindow(id,title,html,{width:w,height:h,onRender});},
-  open_clock(){this.win('os-clock','Clock',`<div class="h-full flex flex-col items-center justify-center bg-slate-950 gap-4"><div id="os-clock-time" class="text-6xl font-mono text-cyan-300"></div><div id="os-clock-date" class="text-sm text-slate-400"></div><div class="text-[10px] text-slate-600">WASM OS system time</div></div>`,520,360,()=>{const tick=()=>{const d=new Date(),t=document.getElementById('os-clock-time'),dt=document.getElementById('os-clock-date');if(t)t.textContent=d.toLocaleTimeString();if(dt)dt.textContent=d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});};tick();const k=setInterval(tick,250);floatingWindows.get('os-clock').onClose=()=>clearInterval(k);});},
-  open_calculator(){this.win('os-calc','Calculator',`<div class="h-full p-4 bg-slate-950 flex flex-col gap-3"><input id="os-calc-in" value="${escapeHtml(this.state.calculatorExpression||'')}" class="p-3 rounded bg-slate-900 border border-slate-700 font-mono text-lg" placeholder="(12+3)*4 / 2"><button id="os-calc-run" class="p-2 rounded bg-emerald-700 text-white">Calculate</button><pre id="os-calc-out" class="flex-1 p-3 bg-black/30 rounded border border-slate-800 text-emerald-300 font-mono"></pre></div>`,520,420,()=>{const run=()=>{const i=document.getElementById('os-calc-in'),o=document.getElementById('os-calc-out');try{const expr=String(i.value||'');if(!/^[0-9+\-*/%()., eEpiPIcosintaqrulbfx^]*$/i.test(expr))throw new Error('Unsupported characters');const safe=expr.replace(/\^/g,'**').replace(/\bpi\b/ig,'Math.PI').replace(/\bsin\b/ig,'Math.sin').replace(/\bcos\b/ig,'Math.cos').replace(/\btan\b/ig,'Math.tan').replace(/\bsqrt\b/ig,'Math.sqrt').replace(/\babs\b/ig,'Math.abs').replace(/\blog\b/ig,'Math.log');const v=Function(`"use strict";return (${safe})`)();o.textContent=String(v);}catch(e){o.textContent='ERROR: '+e.message;}};document.getElementById('os-calc-run').onclick=run;document.getElementById('os-calc-in').onkeydown=e=>{if(e.key==='Enter')run();};});},
-  open_recorder(){let media=null,chunks=[];this.win('os-recorder','Recorder',`<div class="h-full p-4 bg-slate-950 flex flex-col gap-3"><div class="text-sm text-slate-300">Microphone Recorder</div><div id="os-rec-state" class="text-xs text-slate-500">Idle</div><div class="flex gap-2"><button id="os-rec-start" class="p-2 bg-rose-800 rounded">Record</button><button id="os-rec-stop" class="p-2 bg-slate-800 rounded">Stop</button></div><audio id="os-rec-audio" controls class="w-full"></audio><div class="text-[10px] text-slate-600">Browser microphone permission is always user-controlled and is not portable in workspace snapshots.</div></div>`,560,390,()=>{document.getElementById('os-rec-start').onclick=async()=>{try{const st=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];media=new MediaRecorder(st);media.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};media.onstop=()=>{const b=new Blob(chunks,{type:media.mimeType||'audio/webm'});document.getElementById('os-rec-audio').src=URL.createObjectURL(b);st.getTracks().forEach(t=>t.stop());};media.start();document.getElementById('os-rec-state').textContent='Recording...';}catch(e){document.getElementById('os-rec-state').textContent=e.message;}};document.getElementById('os-rec-stop').onclick=()=>{media?.stop?.();document.getElementById('os-rec-state').textContent='Stopped';};});},
-  open_camera(){let stream=null;this.win('os-camera','Camera',`<div class="h-full p-3 bg-black flex flex-col gap-2"><video id="os-cam-video" autoplay playsinline class="flex-1 min-h-0 object-contain rounded bg-black"></video><div class="flex gap-2"><button id="os-cam-start" class="p-2 bg-amber-700 rounded">Start Camera</button><button id="os-cam-stop" class="p-2 bg-slate-800 rounded">Stop</button></div></div>`,720,560,()=>{const v=document.getElementById('os-cam-video');document.getElementById('os-cam-start').onclick=async()=>{try{stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});v.srcObject=stream;}catch(e){OS_NOTIFICATION_CENTER.post(null,'Camera',e.message,3);}};document.getElementById('os-cam-stop').onclick=()=>{stream?.getTracks()?.forEach(t=>t.stop());stream=null;v.srcObject=null;};const w=floatingWindows.get('os-camera');const old=w.onClose;w.onClose=()=>{stream?.getTracks()?.forEach(t=>t.stop());old?.();};});},
-  open_browser(){launchPacketOwnedSystemBrowser(this.state.browserUrl||'').catch(e=>{logConsole('[Browser] '+e.message,'error');OS_NOTIFICATION_CENTER.post(null,'Browser failed to start',e.message,3);});},
-  open_ai(){const render=()=>{const ps=GLOBAL_APP_SERVICE_FABRIC.liveProviders('ai.inference.generate');return ps.length?ps.map(p=>`<div class="p-3 rounded border border-purple-800/50 bg-purple-950/20"><b class="text-purple-300">${escapeHtml(p.name)}@${escapeHtml(p.version)}</b><div class="text-[10px] text-slate-400">${escapeHtml(p.session?.tab?.name||'provider')} · active ${p.active}/${p.capacity} · q ${p.queued} · ${p.ewmaMs.toFixed(1)}ms</div></div>`).join(''):'<div class="p-4 text-slate-500">No ai.inference.generate provider installed/running. Install or run the AI Engine application when available.</div>';};this.win('os-ai','AI Engine',`<div class="h-full p-4 bg-slate-950"><div class="text-sm font-bold text-purple-300 mb-3">AI Runtime Control Plane</div><div id="os-ai-providers" class="space-y-2"></div></div>`,700,520,()=>{const r=()=>{const el=document.getElementById('os-ai-providers');if(el)el.innerHTML=render();};r();const k=setInterval(r,1000);floatingWindows.get('os-ai').onClose=()=>clearInterval(k);});},
-  open_files(){const render=(path='/')=>{path=path||'/';const prefix=path==='/'?'/':path.replace(/\/$/,'')+'/';const rows=[];for(const[p,n]of [...GLOBAL_SHARED_VFS.entries()].sort()){if(p===path||!p.startsWith(prefix))continue;const rest=p.slice(prefix.length);if(rest.includes('/'))continue;rows.push({path:p,name:rest||p,node:n});}const b=document.getElementById('os-files-list'),crumb=document.getElementById('os-files-path');if(crumb)crumb.value=path;if(b)b.innerHTML=rows.map(r=>`<div data-path="${escapeHtml(r.path)}" class="p-2 border-b border-slate-800 flex justify-between cursor-pointer hover:bg-slate-900"><span><i class="fa-solid ${r.node.kind==='dir'?'fa-folder text-amber-300':'fa-file text-slate-400'} ml-2"></i>${escapeHtml(r.name)}</span><span class="text-[9px] text-slate-600">${r.node.kind==='file'?`${r.node.data?.length||0} B`:'DIR'}</span></div>`).join('')||'<div class="text-slate-500 p-3">Empty</div>';b?.querySelectorAll('[data-path]').forEach(x=>x.onclick=()=>{const n=GLOBAL_SHARED_VFS.get(x.dataset.path);if(n?.kind==='dir')render(x.dataset.path);});};this.win('os-files','Files',`<div class="h-full flex flex-col bg-slate-950"><div class="p-2 flex gap-2 border-b border-slate-800"><button id="os-files-up" class="px-3 bg-slate-800 rounded">↑</button><input id="os-files-path" class="flex-1 p-2 bg-slate-900 border border-slate-700 rounded font-mono" value="/"><button id="os-files-go" class="px-3 bg-cyan-800 rounded">Go</button></div><div id="os-files-list" class="flex-1 overflow-auto"></div></div>`,760,580,()=>{let current=()=>document.getElementById('os-files-path').value||'/';document.getElementById('os-files-go').onclick=()=>render(current());document.getElementById('os-files-up').onclick=()=>{const p=current().replace(/\/$/,'');render(p.includes('/')?p.slice(0,p.lastIndexOf('/'))||'/':'/');};render('/');});},
-  open_terminal(){this.win('os-terminal','Terminal',`<div class="h-full flex flex-col bg-black"><pre id="os-term-out" class="flex-1 overflow-auto p-3 text-emerald-300 font-mono text-[11px]">WASM OS V31 diagnostic shell\ncommands: help, apps, services, graph, ls [path], capabilities, permissions\n</pre><div class="p-2 flex gap-2 border-t border-slate-800"><span class="text-emerald-400">$</span><input id="os-term-in" class="flex-1 bg-black outline-none font-mono text-emerald-200"></div></div>`,760,540,()=>{const i=document.getElementById('os-term-in'),o=document.getElementById('os-term-out');const run=()=>{const cmd=i.value.trim(),[c,...a]=cmd.split(/\s+/);let r='';if(c==='help')r='help, apps, services, graph, ls [path], capabilities, permissions';else if(c==='apps')r=OS_SYSTEM_GRAPH.snapshot().apps.map(x=>`${x.appId}  ${x.kind}  ${x.running?'RUN':'STOP'}  ${x.name}`).join('\n');else if(c==='services')r=OS_SYSTEM_GRAPH.snapshot().services.map(x=>`${x.name}@${x.version} <- ${x.providerAppId}`).join('\n');else if(c==='graph')r=JSON.stringify(OS_SYSTEM_GRAPH.snapshot(),null,2);else if(c==='capabilities')r=JSON.stringify(OS_CAPABILITY_SECURITY.catalog(),null,2);else if(c==='permissions')r=[...runtimeSessions.values()].map(s=>`${s.tab.name}\n${JSON.stringify(OS_PERMISSION_MANAGER.policySnapshot(s),null,2)}`).join('\n\n');else if(c==='ls'){const p=a[0]||'/';r=[...GLOBAL_SHARED_VFS.keys()].filter(x=>x.startsWith(p)).join('\n');}else r=`unknown command: ${c}`;o.textContent+=`\n$ ${cmd}\n${r}\n`;o.scrollTop=o.scrollHeight;i.value='';};i.onkeydown=e=>{if(e.key==='Enter')run();};});},
-  open_control(){showOsControlCenter();},open_graph(){showOsServiceGraph();},open_microservices(){showMicroserviceManager();}
-};
-
-// Pseudo system provider so built-in capabilities are part of the same graph.
-const OS_CORE_SERVICE_SESSION={id:'runtime-os-core',running:true,tab:{name:'WASM OS Core',osAppId:'wasmos.system.core'},safeCall(name,args){if(name==='serviceRequest')OS_CORE_SERVICES.handleRequest(args[0],args[1]);},writeBytes(){return 0;}};
-const OS_CORE_SERVICES={ids:new Map(),install(){const defs=[['os.time','1.0.0','Time/date service'],['os.math','1.0.0','Math expression service'],['os.browser','1.0.0','Browser/open URL service'],['os.ai.registry','1.0.0','AI provider discovery service']];for(const[n,v,summary]of defs){if(GLOBAL_APP_SERVICE_FABRIC.liveProviders(n).some(x=>x.session===OS_CORE_SERVICE_SESSION))continue;const id=GLOBAL_APP_SERVICE_FABRIC.register(OS_CORE_SERVICE_SESSION,n,v,1);const c={schema:WASM_OS_SERVICE_CONTRACT_SCHEMA,service:n,version:v,summary,methods:n==='os.time'?[{name:'now',input:{contentType:'application/json'},output:{contentType:'application/json'}}]:n==='os.math'?[{name:'calculate',input:{contentType:'application/json'},output:{contentType:'application/json'}}]:n==='os.browser'?[{name:'open',input:{contentType:'application/json'},output:{contentType:'application/json'}}]:[{name:'providers',input:{contentType:'application/json'},output:{contentType:'application/json'}}]};OS_SERVICE_CONTRACTS.contracts.set(id,c);this.ids.set(id,n);}},
-  handleRequest(reqId,svcId){const q=GLOBAL_APP_SERVICE_FABRIC.requests.get(reqId);if(!q)return;const name=this.ids.get(svcId),method=textDecoder.decode(q.method),payload=osJsonParse(textDecoder.decode(q.payload),{});let out={ok:true};try{if(name==='os.time')out={ok:true,epochMs:Date.now(),iso:new Date().toISOString(),timezone:Intl.DateTimeFormat().resolvedOptions().timeZone};else if(name==='os.math'){const expr=String(payload.expression||'');if(!/^[0-9+\-*/%(). eE^]+$/.test(expr))throw new Error('unsupported expression');out={ok:true,result:Function(`"use strict";return (${expr.replace(/\^/g,'**')})`)()};}else if(name==='os.browser'){const url=String(payload.url||'');if(!/^https?:\/\//i.test(url))throw new Error('http/https required');launchPacketOwnedSystemBrowser(url).catch(e=>logConsole('[Browser] service launch failed: '+e.message,'error'));out={ok:true,accepted:true,engine:'wasm-packet-owned'};}else if(name==='os.ai.registry')out={ok:true,providers:GLOBAL_APP_SERVICE_FABRIC.liveProviders('ai.inference.generate').map(p=>({id:p.id,version:p.version,app:p.session?.tab?.name,load:{active:p.active,queued:p.queued,capacity:p.capacity,ewmaMs:p.ewmaMs}}))};else throw new Error('unknown service');GLOBAL_APP_SERVICE_FABRIC.respond(OS_CORE_SERVICE_SESSION,reqId,200,osUtf8(out));}catch(e){GLOBAL_APP_SERVICE_FABRIC.respond(OS_CORE_SERVICE_SESSION,reqId,500,osUtf8({ok:false,error:e.message}));}}
-};
-
-function showOsControlCenter(){const id='os-control-center';if(floatingWindows.get(id)){floatingWindows.get(id).bringToFront();return;}let timer=0;new FloatingWindow(id,'OS Control Center',`<div class="h-full flex flex-col bg-slate-950"><div class="p-3 border-b border-slate-800 flex gap-2"><button data-tab="apps" class="os-cc-tab p-2 bg-slate-800 rounded">Apps</button><button data-tab="permissions" class="os-cc-tab p-2 bg-slate-800 rounded">Permissions</button><button data-tab="services" class="os-cc-tab p-2 bg-slate-800 rounded">Services</button><button data-tab="health" class="os-cc-tab p-2 bg-slate-800 rounded">Health</button></div><div id="os-cc-body" class="flex-1 overflow-auto p-3"></div></div>`,980,700,{onRender:()=>{let tab='apps';const render=()=>{const b=document.getElementById('os-cc-body');if(!b)return;const g=OS_SYSTEM_GRAPH.snapshot();if(tab==='apps')b.innerHTML=g.apps.map(a=>`<div class="p-2 border-b border-slate-800"><b class="text-cyan-300">${escapeHtml(a.name)}</b> <span class="text-[9px] text-slate-500">${escapeHtml(a.kind)} ${escapeHtml(a.version||'')}</span><div class="text-[10px] text-slate-400">${escapeHtml(a.role||a.summary||'')}</div></div>`).join('');else if(tab==='permissions')b.innerHTML=[...runtimeSessions.values()].map(s=>`<div class="mb-3 p-3 rounded border border-slate-800"><b>${escapeHtml(s.tab.name)}</b><pre class="text-[9px] whitespace-pre-wrap text-slate-400">${escapeHtml(JSON.stringify(OS_PERMISSION_MANAGER.policySnapshot(s),null,2))}</pre></div>`).join('')||'<div class="text-slate-500">No running apps</div>';else if(tab==='services')b.innerHTML=g.services.map(s=>`<div class="mb-2 p-3 rounded border border-emerald-900/50"><b class="text-emerald-300">${escapeHtml(s.name)}@${escapeHtml(s.version)}</b><div class="text-[10px] text-slate-400">${escapeHtml(s.provider||'')}</div><pre class="text-[9px] text-slate-500 whitespace-pre-wrap">${escapeHtml(JSON.stringify(s.contract,null,2))}</pre></div>`).join('');else b.innerHTML=[...runtimeSessions.values()].map(s=>`<div class="p-3 border-b border-slate-800"><b>${escapeHtml(s.tab.name)}</b><pre class="text-[9px] text-slate-400">${escapeHtml(JSON.stringify(OS_PROCESS_SUPERVISOR.snapshot(s),null,2))}</pre></div>`).join('')||'<div class="text-slate-500">No running apps</div>';};document.querySelectorAll('#win-os-control-center .os-cc-tab').forEach(x=>x.onclick=()=>{tab=x.dataset.tab;render();});render();timer=setInterval(render,1200);},onClose:()=>clearInterval(timer)});}
-
-function showOsServiceGraph(){const id='os-service-graph';if(floatingWindows.get(id)){floatingWindows.get(id).bringToFront();return;}let timer=0;new FloatingWindow(id,'Service Graph',`<div id="os-sg-body" class="h-full overflow-auto p-4 bg-slate-950"></div>`,1000,720,{onRender:()=>{const render=()=>{const b=document.getElementById('os-sg-body');if(!b)return;const g=OS_SYSTEM_GRAPH.snapshot();const deps=g.dependencies.map(d=>`<div class="py-1"><span class="text-cyan-300">${escapeHtml(d.appId)}</span> <i class="fa-solid fa-arrow-right text-slate-600"></i> <span class="text-emerald-300">${escapeHtml(d.service)} ${escapeHtml(d.version)}</span> <span class="${d.satisfied?'text-emerald-500':'text-rose-400'}">${d.satisfied?'✓':'MISSING'}</span></div>`).join('');const sv=g.services.map(s=>`<div class="p-3 rounded border border-slate-800 mb-2"><b class="text-emerald-300">${escapeHtml(s.name)}@${escapeHtml(s.version)}</b><div class="text-[10px] text-slate-500">provider ${escapeHtml(s.providerAppId)} · ${s.load.active}/${s.load.capacity} q=${s.load.queued}</div></div>`).join('');b.innerHTML=`<div class="grid grid-cols-2 gap-4"><section><h3 class="font-bold text-cyan-300 mb-2">Dependency edges</h3>${deps||'<div class="text-slate-500">No declared dependency edges yet.</div>'}</section><section><h3 class="font-bold text-emerald-300 mb-2">Live providers</h3>${sv}</section></div>`;};render();timer=setInterval(render,1000);},onClose:()=>clearInterval(timer)});}
-
-function showMicroserviceManager(){const id='os-microservice-manager';if(floatingWindows.get(id)){floatingWindows.get(id).bringToFront();return;}let timer=0;new FloatingWindow(id,'Microservices',`<div id="os-ms-body" class="h-full overflow-auto p-4 bg-slate-950"></div>`,900,650,{onRender:()=>{const render=()=>{const b=document.getElementById('os-ms-body');if(!b)return;const rows=fileTabs.filter(t=>t.osManifest?.kind==='microservice').map(t=>{const s=sessionByTab.get(t.id),m=t.osManifest,sv=s?runtimeServices(s):[],v=s?OS_APP_MODEL.validatePureMicroservice(s):{ok:false,issues:['not running']};return`<div class="mb-3 p-3 rounded-xl border ${v.ok?'border-emerald-900/60':'border-rose-900/60'} bg-slate-900/50"><div class="flex justify-between"><div><b class="text-orange-300">${escapeHtml(m.name)}</b><div class="text-[10px] text-slate-500">${escapeHtml(m.id)}@${escapeHtml(m.version)}</div></div><span class="${v.ok?'text-emerald-400':'text-rose-400'} text-[10px]">${v.ok?'VERIFIED':'INVALID'}</span></div><div class="text-[10px] text-slate-400 mt-2">${escapeHtml(m.summary)}</div><div class="text-[10px] text-emerald-300 mt-2">${sv.map(x=>`${x.name}@${x.version}`).join(', ')||'No services'}</div>${v.ok?'':`<div class="text-[9px] text-rose-300 mt-2">${escapeHtml(v.issues.join(' · '))}</div>`}<button data-remove="${escapeHtml(s?.id||'tab:'+t.id)}" class="mt-3 px-2 py-1 rounded bg-rose-950 border border-rose-800 text-rose-300 text-[10px]">Remove microservice</button></div>`;}).join('');b.innerHTML=rows||'<div class="text-slate-500">No running pure microservices.</div>';b.querySelectorAll('[data-remove]').forEach(btn=>btn.onclick=()=>{const key=btn.dataset.remove;let s=runtimeSessions.get(key);if(s)uninstallMicroserviceWithImpact(s);else if(key.startsWith('tab:')){const t=fileTabs.find(x=>x.id===key.slice(4));if(t&&confirm(`Remove installed microservice ${t.name}?`))closeTab(t.id);}});};render();timer=setInterval(render,1000);},onClose:()=>clearInterval(timer)});}
+@@PACKAGE_RUNTIME@@
 
 function uninstallMicroserviceWithImpact(session){const sv=runtimeServices(session),imp=[];for(const x of sv)imp.push(...OS_SERVICE_CONTRACTS.impactForService(x.name).map(d=>({...d,service:x.name})));const critical=imp.filter(x=>x.critical&&!x.optional);const msg=`Remove ${session.tab.name}?\n\nPublished: ${sv.map(x=>x.name).join(', ')||'none'}\nDependents: ${imp.map(x=>`${x.appName} -> ${x.service} ${x.range}${x.critical?' [CRITICAL]':''}`).join('\n')||'none'}\n\n${critical.length?'WARNING: removing it will break startup-critical capabilities.':''}`;if(!confirm(msg))return;const tab=session.tab;session.stop('microservice uninstalled');if(confirm('Also delete its installed source/binary from WASM OS?'))closeTab(tab.id);}
 
@@ -2520,13 +2212,8 @@ function uninstallOsApplication(tab){const x=osAppUninstallImpact(tab),critical=
 // Existing user islands + installed WASM apps are preserved by original renderer.
 // -----------------------------------------------------------------------------
 const _osRenderDesktopIcons=renderDesktopIcons;
-renderDesktopIcons=function(){_osRenderDesktopIcons();const grid=document.getElementById('desktopIconsGrid');if(!grid)return;let dash=document.getElementById('os-v31-dashboard');if(!dash){dash=document.createElement('div');dash.id='os-v31-dashboard';dash.className='col-span-full grid grid-cols-4 gap-2 mb-2';grid.before(dash);}const g=OS_SYSTEM_GRAPH.snapshot(),ms=fileTabs.filter(t=>t.osManifest?.kind==='microservice').length,ai=GLOBAL_APP_SERVICE_FABRIC.liveProviders('ai.inference.generate').length;dash.innerHTML=`<button class="p-2 rounded-xl border border-slate-800 bg-slate-950/70 text-left" onclick="window.WASM_OS_V31.showControlCenter()"><div class="text-[9px] text-slate-500">INSTALLED</div><div class="text-cyan-300 font-bold">${fileTabs.length} apps</div></button><button class="p-2 rounded-xl border border-slate-800 bg-slate-950/70 text-left" onclick="window.WASM_OS_V31.showServiceGraph()"><div class="text-[9px] text-slate-500">SERVICES</div><div class="text-emerald-300 font-bold">${g.services.length} live</div></button><button class="p-2 rounded-xl border border-slate-800 bg-slate-950/70 text-left" onclick="window.WASM_OS_V31.showMicroservices()"><div class="text-[9px] text-slate-500">MICROSERVICES</div><div class="text-orange-300 font-bold">${ms} installed</div></button><button class="p-2 rounded-xl border border-slate-800 bg-slate-950/70 text-left" onclick="window.WASM_OS_V31.builtins.launch('wasmos.system.ai')"><div class="text-[9px] text-slate-500">AI FABRIC</div><div class="${ai?'text-purple-300':'text-slate-500'} font-bold">${ai?'ONLINE '+ai:'no provider'}</div></button>`;const first=grid.firstChild;for(const a of OS_BUILTIN_APPS.registry){const el=document.createElement('div');el.className=`os-desktop-icon group ${a.id==='wasmos.system.microservices'?'os-island-icon':''}`;el.dataset.osBuiltin=a.id;const msCount=fileTabs.filter(t=>t.osManifest?.kind==='microservice').length;el.innerHTML=`<div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-slate-900 to-slate-800 border border-slate-700 group-hover:border-cyan-400 flex items-center justify-center text-2xl shadow-lg relative"><i class="fa-solid ${a.id==='wasmos.system.microservices'?'fa-folder-open':a.icon} ${a.color}"></i>${a.id==='wasmos.system.microservices'?`<span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-orange-400 text-slate-950 text-[9px] font-black flex items-center justify-center">${msCount}</span>`:''}</div><span class="mt-2.5 text-xs text-slate-200 font-medium truncate max-w-[100px]">${escapeHtml(a.name)}</span><span class="text-[9px] font-mono ${a.id==='wasmos.system.microservices'?'text-orange-400':'text-cyan-500'}">${a.id==='wasmos.system.microservices'?'MICROSERVICES':'SYSTEM'}</span>`;el.title=`${a.role}\n${a.summary}`;el.onclick=()=>OS_BUILTIN_APPS.launch(a.id);grid.insertBefore(el,first);}
-  // Hide pure headless microservices as standalone icons; they are managed in Microservices system app.
-  for(const tab of fileTabs){const m=tab.osManifest;if(m?.kind==='microservice'||tab.osInstallMeta?.hiddenDesktopDuplicate){const icons=[...grid.querySelectorAll('.os-desktop-icon')].filter(x=>x.textContent?.includes(tab.name.replace(/\.[^.]+$/,'')));for(const x of icons)x.style.display='none';}}
-  const badge=document.getElementById('desktopAppCount');if(badge)badge.textContent=`${fileTabs.length+OS_BUILTIN_APPS.registry.length} APPS`;
-};
+renderDesktopIcons=function(){_osRenderDesktopIcons();renderPackageDesktop();};
 
-// -----------------------------------------------------------------------------
 // Gemini: static ABI + live graph + autonomous reusable microservice gate.
 // -----------------------------------------------------------------------------
 const _osPatchSystemInstruction=patchSystemInstruction;
@@ -2556,19 +2243,10 @@ generateNewAppWithGemini=async function(){const input=document.getElementById('a
 // -----------------------------------------------------------------------------
 // Workspace portability V2: add system metadata; secret bytes remain excluded.
 // -----------------------------------------------------------------------------
-const _osCaptureWorkspaceSnapshot=captureWorkspaceSnapshot;
-captureWorkspaceSnapshot=function(){const x=_osCaptureWorkspaceSnapshot();OS_BUILTIN_APPS.captureUiState();const v31Ids=['os-clock','os-calc','os-recorder','os-camera','os-browser','os-ai','os-files','os-terminal','os-control-center','os-service-graph','os-microservice-manager'];x.v31Windows=v31Ids.map(id=>floatingWindows.get(id)?.snapshotState?.()).filter(Boolean);x.systemGraphSummary={apps:OS_SYSTEM_GRAPH.snapshot().apps.map(a=>({appId:a.appId,name:a.name,kind:a.kind,version:a.version,role:a.role})),note:'Runtime service connections are rediscovered after restore.'};x.portability={portable:['source','compiled WASM','VFS','app-private storage','OS permission policy','window state','semantic manifests'],reauthorize:['camera','microphone','USB','serial','BLE','physical file handles','browser-level permission grants'],excluded:['Credential Vault secret bytes','live sockets','opaque device handles']};return x;};
-const _osRestoreWorkspaceSnapshot=restoreWorkspaceSnapshot;
-restoreWorkspaceSnapshot=async function(snapshot){await _osRestoreWorkspaceSnapshot(snapshot);const launchMap={'os-clock':'wasmos.system.clock','os-calc':'wasmos.system.calculator','os-recorder':'wasmos.system.recorder','os-camera':'wasmos.system.camera','os-ai':'wasmos.system.ai','os-files':'wasmos.system.files','os-terminal':'wasmos.system.terminal','os-control-center':'wasmos.system.control','os-service-graph':'wasmos.system.services','os-microservice-manager':'wasmos.system.microservices'};for(const ws of snapshot?.v31Windows||[]){const appId=launchMap[ws.id];if(!appId)continue;OS_BUILTIN_APPS.launch(appId);await sleepMs(5);floatingWindows.get(ws.id)?.applySnapshotState?.(ws);}let z=100;for(const w of floatingWindows.values())z=Math.max(z,Number(w?.element?.style?.zIndex)||0);zIndexCounter=z;};
-
-// -----------------------------------------------------------------------------
 // System UI / styles / initialization
 // -----------------------------------------------------------------------------
-function migrateDesktopIslandsV31(){if(desktopIslands.length===1&&desktopIslands[0]?.id==='island-system-samples'){desktopIslands=DEFAULT_DESKTOP_ISLANDS.map(x=>osCloneJson(x));saveDesktopIslands();return;}for(const isl of desktopIslands){if(!Array.isArray(isl.items))isl.items=[];isl.items=isl.items.filter(x=>x.type!=='sample');}saveDesktopIslands();}
-
-function installV31Ui(){hookRuntimeSessionV31();migrateDesktopIslandsV31();document.querySelector('h1')?.replaceChildren(document.createTextNode('WASM OS V31 · AI-NATIVE PLATFORM'));const sample=document.getElementById('sampleSelect');if(sample?.parentElement)sample.parentElement.style.display='none';const style=document.createElement('style');style.textContent=`.os-v31-chip{font-size:9px;padding:2px 6px;border:1px solid #334155;border-radius:999px;background:#0f172a}.os-microservice-badge{color:#fb923c;border-color:#7c2d12}.wasm-os-desktop #desktopIconsGrid{padding-bottom:80px}`;document.head.appendChild(style);ensureOsDefaultFolders();OS_CORE_SERVICES.install();renderDesktopIcons();}
-
-window.WASM_OS_V31={version:WASM_OS_PLATFORM_VERSION,graph:()=>OS_SYSTEM_GRAPH.snapshot(),capabilities:()=>OS_CAPABILITY_SECURITY.catalog(),apps:OS_APP_MODEL,permissions:OS_PERMISSION_MANAGER,services:OS_SERVICE_CONTRACTS,builtins:OS_BUILTIN_APPS,showControlCenter:showOsControlCenter,showServiceGraph:showOsServiceGraph,showMicroservices:showMicroserviceManager};
+function installV31Ui(){hookRuntimeSessionV31();ensureOsDefaultFolders();initRepoPackages().catch(e=>logConsole(e.message,'warn'));renderDesktopIcons();}
+window.WASM_OS_V31={version:WASM_OS_PLATFORM_VERSION,graph:()=>OS_SYSTEM_GRAPH.snapshot(),capabilities:()=>OS_CAPABILITY_SECURITY.catalog(),apps:OS_APP_MODEL,permissions:OS_PERMISSION_MANAGER,services:OS_SERVICE_CONTRACTS,packages:Object.freeze({installed:()=>packageManager.list().map(packageDisplayMetadata),installBase:()=>installRepoBase(),browseExtras:()=>browseRepoExtras(),open:id=>openRepoPackage(id),remove:id=>removeRepoPackage(id)}),compileImportedSource:source=>compileTab({id:'import-preview',name:'import.ts',kind:'source',content:stripAutoSdk(source),dirty:true},{log:false})};
 
 window.addEventListener('load',()=>{installV31Ui();logConsole(`[WASM OS V31] ABI ${APP_ABI_VERSION}; ${HOST_ABI_MANIFEST.length} Host capabilities; ${Object.keys(OS_PERMISSION_DEFS).length} permission domains; live composition graph online.`,'success');}, {once:false});
 
@@ -2773,6 +2451,7 @@ function switchTab(id) {
 function closeTab(id) {
   const idx = fileTabs.findIndex(t => t.id === id);
   if (idx < 0) return;
+  officialTabs.delete(id);
   const tab = fileTabs[idx];
   const session = sessionByTab.get(id);
   if (session) session.stop('tab closed');
@@ -7398,9 +7077,7 @@ function safeWorkspaceStorageKey(key) {
 // DESKTOP ISLANDS & SAMPLE APPS SYSTEM (ANDROID-STYLE APP FOLDERS)
 // =============================================================================
 
-const DEFAULT_DESKTOP_ISLANDS = [
-  { id:'island-user-apps', name:'האפליקציות שלי', items:[] }
-];
+const DEFAULT_DESKTOP_ISLANDS = [];
 
 let desktopIslands = (() => {
   try {
@@ -7417,22 +7094,6 @@ function saveDesktopIslands() {
 }
 
 let activeOpenIsland = null;
-
-async function launchSampleApp(sampleKey) {
-  const sampleCode = CODE_SAMPLES[sampleKey];
-  if (!sampleCode) return;
-  const fileName = `${sampleKey}.ts`;
-  let targetTab = fileTabs.find(t => t.name === fileName);
-
-  if (!targetTab) {
-    targetTab = createNewTab(fileName, sampleCode);
-  } else {
-    switchTab(targetTab.id);
-  }
-
-  await compileAndRunWasm(targetTab.id);
-  renderDesktopIcons();
-}
 
 function openIslandModal(island) {
   activeOpenIsland = island;
@@ -7510,7 +7171,7 @@ function openIslandModal(island) {
 
     el.addEventListener('click', async () => {
       if (item.type === 'sample') {
-        await launchSampleApp(item.key);
+        await browseRepoExtras();
       } else if (item.type === 'tab' && targetTab) {
         switchTab(targetTab.id);
         await compileAndRunWasm(targetTab.id);
@@ -7579,19 +7240,6 @@ function closeIslandModal() {
 }
 
 function getAppVisualMeta(name, kind = 'source') {
-  const n = String(name || '').toLowerCase();
-  if (n.includes('gguf') || n.includes('llm') || n.includes('inference') || n.includes('qwen') || n.includes('llama')) {
-    return { icon: 'fa-brain', color: 'text-purple-400', border: 'hover:border-purple-500', glow: 'shadow-purple-500/20', category: 'NEURAL AI' };
-  }
-  if (n.includes('rtsp') || n.includes('camera') || n.includes('video') || n.includes('whep')) {
-    return { icon: 'fa-video', color: 'text-rose-400', border: 'hover:border-rose-500', glow: 'shadow-rose-500/20', category: 'MEDIA / RTSP' };
-  }
-  if (n.includes('http') || n.includes('net') || n.includes('client') || n.includes('tcp') || n.includes('socket')) {
-    return { icon: 'fa-globe', color: 'text-cyan-400', border: 'hover:border-cyan-500', glow: 'shadow-cyan-500/20', category: 'NETWORK' };
-  }
-  if (n.includes('ball') || n.includes('bouncing') || n.includes('mandelbrot') || n.includes('life')) {
-    return { icon: 'fa-cubes-stacked', color: 'text-amber-400', border: 'hover:border-amber-500', glow: 'shadow-amber-500/20', category: 'GRAPHICS' };
-  }
   if (kind === 'binary') {
     return { icon: 'fa-cube', color: 'text-emerald-400', border: 'hover:border-emerald-500', glow: 'shadow-emerald-500/20', category: 'BINARY WASM' };
   }
@@ -7792,7 +7440,7 @@ function renderDesktopIcons() {
 
   // 2. Registered Applications from File Tabs (Stand-alone Apps on Desktop)
   fileTabs.forEach(tab => {
-    if (tab.osManifest?.kind === 'microservice') return;
+    if (officialTabs.has(tab.id) || tab.osManifest?.kind === 'microservice') return;
     const isRunning = sessionByTab.has(tab.id);
     const meta = getAppVisualMeta(tab.name, tab.kind);
     const iconEl = document.createElement('div');
@@ -8004,14 +7652,16 @@ function restoreHostStorage(values) {try{for(let i=localStorage.length-1;i>=0;i-
 function workspaceTabSnapshot(tab) {const pw=floatingWindows.get(`patches-${tab.id}`);return {name:tab.name,kind:tab.kind,content:tab.content||'',binary:tab.binary?bytesToBase64(tab.binary):'',lastCompiledBinary:tab.lastCompiledBinary?bytesToBase64(tab.lastCompiledBinary):'',lastWat:tab.lastWat||'',lastError:tab.lastError||null,lastBuildMs:tab.lastBuildMs??null,dirty:!!tab.dirty,patchHistory:tab.patchHistory||[],patchWindow:pw?.snapshotState?.()||null,osAppId:tab.osAppId||null,osManifest:tab.osManifest||null,osInstallMeta:tab.osInstallMeta||null,createdAt:tab.createdAt||Date.now()};}
 function captureWorkspaceSnapshot() {
   fileTabs.forEach(t=>ensureTabContentSaved(t));
-  const tabIndex=new Map(fileTabs.map((t,i)=>[t.id,i]));
+  const portableTabs=fileTabs.filter(t=>!officialTabs.has(t.id)||(t.kind==='source'&&t.content!==officialTabs.get(t.id).original));
+  const tabIndex=new Map(portableTabs.map((t,i)=>[t.id,i]));
   const runtimes=[...runtimeSessions.values()].filter(r=>r.running).map(r=>{const inspector=floatingWindows.get(`app-inspector-${r.id}`);return {tabIndex:tabIndex.get(r.tabId)??-1,window:r.window?.snapshotState?.()||null,inspectorWindow:inspector?.snapshotState?.()||null,appState:captureOptionalAppWorkspaceState(r)};}).filter(r=>r.tabIndex>=0);
   const abiWindow=floatingWindows.get('abi-schema')?.snapshotState?.()||null;
-  return {format:'WASM-OS-WORKSPACE',version:WASM_OS_SNAPSHOT_VERSION,createdAt:new Date().toISOString(),host:{abiVersion:APP_ABI_VERSION,mode:wasmOsMode,userAgent:navigator.userAgent,platform:'WASM OS V31.1'},activeTabIndex:fileTabs.findIndex(t=>t.id===activeTabId),tabSequence,tabs:fileTabs.map(workspaceTabSnapshot),runtimes,osWindows:{abi:abiWindow},vfs:snapshotVfs(),storage:snapshotHostStorage(),desktop:{islands:desktopIslands},security:OS_PERMISSION_MANAGER.exportPortablePolicies(),systemApps:OS_BUILTIN_APPS.snapshotState(),settings:{buildMode:document.getElementById('buildModeSelect')?.value||'release',simd:!!document.getElementById('buildSimdToggle')?.checked},nonPortable:{secrets:'excluded',physicalHandles:'reauthorize',liveSockets:'not-serialized',browserPermissionGrants:'reauthorize'},limitations:['Browser-protected device/file handles and live sockets are re-authorized, not serialized.','Credential Vault bytes are never exported.','Raw WASM linear memories larger than 64MiB are not embedded; apps should implement osWorkspaceState* semantic state exports or persist to VFS/storage.']};
+  return {format:'WASM-OS-WORKSPACE',version:WASM_OS_SNAPSHOT_VERSION,createdAt:new Date().toISOString(),host:{abiVersion:APP_ABI_VERSION,mode:wasmOsMode,userAgent:navigator.userAgent,platform:'WASM OS V31.1'},activeTabIndex:portableTabs.findIndex(t=>t.id===activeTabId),tabSequence,tabs:portableTabs.map(tab=>{const st=workspaceTabSnapshot(tab);if(officialTabs.has(tab.id)){st.osAppId=null;st.osInstallMeta={source:"local-edit",trust:"user"};st.lastCompiledBinary="";}return st;}),officialPackages:packageManager.list().map(packageDisplayMetadata),runtimes,osWindows:{abi:abiWindow},vfs:snapshotVfs(),storage:snapshotHostStorage(),desktop:{islands:desktopIslands},security:OS_PERMISSION_MANAGER.exportPortablePolicies(),settings:{buildMode:document.getElementById('buildModeSelect')?.value||'release',simd:!!document.getElementById('buildSimdToggle')?.checked},nonPortable:{secrets:'excluded',physicalHandles:'reauthorize',liveSockets:'not-serialized',browserPermissionGrants:'reauthorize'},limitations:['Browser-protected device/file handles and live sockets are re-authorized, not serialized.','Credential Vault bytes are never exported.','Raw WASM linear memories larger than 64MiB are not embedded; apps should implement osWorkspaceState* semantic state exports or persist to VFS/storage.']};
 }
 function downloadJsonFile(obj,name) {const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);}
 function exportWorkspaceSnapshot() {try{const snap=captureWorkspaceSnapshot(),name=`wasm-os-${new Date().toISOString().replace(/[:.]/g,'-')}.wasmos.json`;downloadJsonFile(snap,name);logConsole(`[WASM OS] Workspace exported: ${snap.tabs.length} tabs, ${snap.runtimes.length} running apps, ${snap.vfs.length} VFS entries.`,'success');}catch(err){logConsole(`[WASM OS] Export failed: ${err?.message||err}`,'error');}}
 async function clearWorkspaceForRestore() {
+  officialTabs.clear();
   [...runtimeSessions.values()].forEach(r=>{try{r.stop('workspace restore');}catch(_){}});
   [...floatingWindows.values()].forEach(w=>{try{if(floatingWindows.has(w.id))w.close();}catch(_){}});
   for(const t of fileTabs){try{t.changeDisposable?.dispose?.();}catch(_){} try{t.model?.dispose?.();}catch(_){}}
@@ -8021,7 +7671,7 @@ async function restoreWorkspaceSnapshot(snapshot) {
   if(workspaceRestoreInFlight)return; workspaceRestoreInFlight=true;
   try{
     if(!snapshot||snapshot.format!=='WASM-OS-WORKSPACE'||!Array.isArray(snapshot.tabs))throw new Error('Not a WASM OS workspace JSON');
-    await clearWorkspaceForRestore(); restoreVfs(snapshot.vfs);restoreHostStorage(snapshot.storage);if(Array.isArray(snapshot.desktop?.islands)){desktopIslands=snapshot.desktop.islands;saveDesktopIslands();}OS_PERMISSION_MANAGER.importPortablePolicies(snapshot.security);OS_BUILTIN_APPS.restoreState(snapshot.systemApps);tabSequence=Math.max(1,Number(snapshot.tabSequence)||1);
+    await clearWorkspaceForRestore(); restoreVfs(snapshot.vfs);restoreHostStorage(snapshot.storage);if(Array.isArray(snapshot.desktop?.islands)){desktopIslands=snapshot.desktop.islands;saveDesktopIslands();}OS_PERMISSION_MANAGER.importPortablePolicies(snapshot.security);tabSequence=Math.max(1,Number(snapshot.tabSequence)||1);
     for(const st of snapshot.tabs){const binary=st.binary?base64ToBytes(st.binary):null;const tab=createTabRecord({name:st.name,kind:st.kind||'source',content:st.content||'',binary});tab.lastCompiledBinary=st.lastCompiledBinary?base64ToBytes(st.lastCompiledBinary):(tab.kind==='binary'?binary:null);tab.lastWat=st.lastWat||'';tab.lastError=st.lastError||null;tab.lastBuildMs=st.lastBuildMs??null;tab.dirty=!!st.dirty;tab.patchHistory=Array.isArray(st.patchHistory)?st.patchHistory:[];tab.osAppId=st.osAppId||tab.osAppId;tab.osManifest=st.osManifest||null;tab.osInstallMeta=st.osInstallMeta||tab.osInstallMeta;tab.createdAt=st.createdAt||Date.now();fileTabs.push(tab);if(tab.kind==='binary'&&binary)try{await inspectRawBinary(tab);}catch(_){}}
     const ai=Number(snapshot.activeTabIndex);if(fileTabs.length)switchTab(fileTabs[Math.max(0,Math.min(fileTabs.length-1,Number.isFinite(ai)?ai:0))].id);else showEmptyWorkspace();
     const build=document.getElementById('buildModeSelect');if(build&&snapshot.settings?.buildMode)build.value=snapshot.settings.buildMode;const simd=document.getElementById('buildSimdToggle');if(simd)simd.checked=!!snapshot.settings?.simd;
@@ -8044,7 +7694,7 @@ function installStudioEnhancements() {
   document.getElementById('btnExportWorkspace')?.addEventListener('click',exportWorkspaceSnapshot);
   document.getElementById('btnImportWorkspace')?.addEventListener('click',()=>document.getElementById('workspaceImportInput')?.click());
   document.getElementById('workspaceImportInput')?.addEventListener('change',async e=>{const f=e.target.files?.[0];e.target.value='';if(f)await importWorkspaceFile(f);});
-  setOsMode(localStorage.getItem('wasm-os:last-mode')==='desktop'?'desktop':'studio',false);
+  setOsMode(localStorage.getItem('wasm-os:last-mode')==='studio'?'studio':'desktop',false);
   const compileBtn = document.getElementById('btnCompile');
 
   // Build Configuration Toggle Injection
@@ -8235,393 +7885,6 @@ function installStudioEnhancements() {
     document.getElementById('consoleOutput').innerHTML = '';
     logCount = 0;
     document.getElementById('logCounter').textContent = '0 הודעות';
-  });
-
-  CODE_SAMPLES.http_client = `// =============================================================================
-// WASM ARCHITECT STUDIO - REAL INTERNET HTTP CLIENT & LIVE DASHBOARD
-// =============================================================================
-
-@external("host", "http_request")
-declare function host_http_request(methodPtr: usize, methodLen: i32, urlPtr: usize, urlLen: i32, bodyPtr: usize, bodyLen: i32): i32;
-
-@external("host", "http_get_status")
-declare function host_http_get_status(requestId: i32): i32;
-
-@external("host", "http_get_response_size")
-declare function host_http_get_response_size(requestId: i32): i32;
-
-@external("host", "http_read_response")
-declare function host_http_read_response(requestId: i32, outPtr: usize, outCap: i32): i32;
-
-@external("host", "now_ms")
-declare function now_ms(): f64;
-
-// High-Level AssemblyScript Network SDK
-export class HttpResponse {
-  status: i32;
-  body: string;
-}
-
-export class HttpClient {
-  static get(url: string): i32 {
-    let uBuf = String.UTF8.encode(url);
-    let mBuf = String.UTF8.encode("GET");
-    return host_http_request(
-      changetype<usize>(mBuf), mBuf.byteLength,
-      changetype<usize>(uBuf), uBuf.byteLength,
-      0, 0
-    );
-  }
-
-  static post(url: string, payload: string): i32 {
-    let uBuf = String.UTF8.encode(url);
-    let pBuf = String.UTF8.encode(payload);
-    let mBuf = String.UTF8.encode("POST");
-    return host_http_request(
-      changetype<usize>(mBuf), mBuf.byteLength,
-      changetype<usize>(uBuf), uBuf.byteLength,
-      changetype<usize>(pBuf), pBuf.byteLength
-    );
-  }
-
-  static pollResponse(reqId: i32): HttpResponse | null {
-    let status = host_http_get_status(reqId);
-    if (status == 0) return null; // Pending
-    let size = host_http_get_response_size(reqId);
-    let res = new HttpResponse();
-    res.status = status;
-    if (size > 0) {
-      let buffer = new ArrayBuffer(size);
-      host_http_read_response(reqId, changetype<usize>(buffer), size);
-      res.body = String.UTF8.decode(buffer);
-    } else {
-      res.body = "";
-    }
-    return res;
-  }
-}
-
-// App Layout & Framebuffer
-const WIDTH: i32 = 800;
-const HEIGHT: i32 = 600;
-export const pixels = new Uint32Array(WIDTH * HEIGHT);
-
-let activeReqId: i32 = -1;
-let statusMsg: string = "STANDBY: CLICK A BUTTON TO SEND REAL HTTP REQUEST";
-let responsePreview: string = "";
-let mouseX: i32 = 0;
-let mouseY: i32 = 0;
-
-function rgba(r: u32, g: u32, b: u32, a: u32 = 255): u32 {
-  return (a << 24) | (b << 16) | (g << 8) | r;
-}
-
-export function getWidth(): i32 { return WIDTH; }
-export function getHeight(): i32 { return HEIGHT; }
-
-export function renderFrame(): i32 {
-  // Poll non-blocking network requests
-  if (activeReqId != -1) {
-    let res = HttpClient.pollResponse(activeReqId);
-    if (res != null) {
-      statusMsg = "RESPONSE STATUS: " + res.status.toString() + " OK";
-      responsePreview = res.body.slice(0, 500);
-      activeReqId = -1;
-    }
-  }
-
-  // Draw Background
-  fill(rgba(13, 17, 23));
-
-  // Header
-  drawText("WASM INTERNET HTTP NETWORK CLIENT", 30, 25, rgba(0, 243, 255), 3);
-  drawRect(30, 65, 740, 2, rgba(40, 50, 75));
-
-  // Buttons Card
-  drawRect(30, 85, 740, 70, rgba(22, 27, 34));
-  drawButton(50, 100, 200, 40, "SEND GET (BTC PRICE)", rgba(0, 180, 255));
-  drawButton(270, 100, 200, 40, "SEND POST (HTTPBIN)", rgba(0, 255, 157));
-
-  // Status Card
-  drawRect(30, 175, 740, 45, rgba(18, 22, 30));
-  let statusColor = (activeReqId != -1) ? rgba(255, 170, 0) : rgba(0, 255, 157);
-  drawText(statusMsg, 45, 190, statusColor, 2);
-
-  // Response Terminal Card
-  drawRect(30, 235, 740, 300, rgba(10, 14, 20));
-  drawRect(30, 235, 740, 25, rgba(28, 35, 48));
-  drawText("HTTP RESPONSE BODY (RAW PAYLOAD):", 45, 242, rgba(180, 200, 230), 1);
-  
-  if (responsePreview.length > 0) {
-    renderWrappedText(responsePreview, 45, 275);
-  } else {
-    drawText("No network response data yet. Click one of the buttons above.", 45, 275, rgba(100, 115, 140), 1);
-  }
-
-  // System Footer
-  let sec = (now_ms() / 1000.0).toString().slice(0, 8);
-  drawText("WASM ASYNC SOCKET POLLER ACTIVE - " + sec + "s", 30, 560, rgba(100, 115, 140), 1);
-
-  return <i32>pixels.dataStart;
-}
-
-export function mouseMove(x: i32, y: i32, buttons: i32, mods: i32): void {
-  mouseX = x;
-  mouseY = y;
-}
-
-export function mouseDown(button: i32, x: i32, y: i32, mods: i32): void {
-  // GET Button
-  if (x >= 50 && x <= 250 && y >= 100 && y <= 140) {
-    statusMsg = "FETCHING: https://api.coindesk.com/v1/bpi/currentprice.json ...";
-    responsePreview = "";
-    activeReqId = HttpClient.get("https://api.coindesk.com/v1/bpi/currentprice.json");
-  }
-
-  // POST Button
-  if (x >= 270 && x <= 470 && y >= 100 && y <= 140) {
-    statusMsg = "POSTING: https://httpbin.org/post ...";
-    responsePreview = "";
-    activeReqId = HttpClient.post("https://httpbin.org/post", '{"sender":"WASM Studio","timestamp":' + now_ms().toString() + '}');
-  }
-}
-
-function renderWrappedText(text: string, x: i32, y: i32): void {
-  let lineY = y;
-  let line = "";
-  for (let i = 0; i < text.length; i++) {
-    let ch = text.charAt(i);
-    if (ch == "\\n" || line.length >= 80) {
-      drawText(line, x, lineY, rgba(0, 255, 157), 1);
-      lineY += 15;
-      line = (ch == "\\n") ? "" : ch;
-      if (lineY > 515) break;
-    } else {
-      line += ch;
-    }
-  }
-  if (line.length > 0 && lineY <= 515) {
-    drawText(line, x, lineY, rgba(0, 255, 157), 1);
-  }
-}
-
-/** Built-in Graphics Engine **/
-function fill(color: u32): void { pixels.fill(color); }
-function setPixel(x: i32, y: i32, color: u32): void {
-  if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) pixels[y * WIDTH + x] = color;
-}
-function drawRect(x: i32, y: i32, w: i32, h: i32, color: u32): void {
-  for (let iy = y; iy < y + h; iy++) {
-    for (let ix = x; ix < x + w; ix++) setPixel(ix, iy, color);
-  }
-}
-function drawButton(x: i32, y: i32, w: i32, h: i32, label: string, color: u32): void {
-  let isHover = mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h;
-  let bg = isHover ? color : rgba(32, 40, 58);
-  drawRect(x, y, w, h, bg);
-  drawRect(x, y, w, 2, rgba(0, 243, 255));
-  drawText(label, x + 12, y + 14, rgba(255, 255, 255), 1);
-}
-
-const FONT: u8[] = [
-  0x00,0x00,0x00,0x00,0x00, 0x00,0x00,0x5F,0x00,0x00, 0x00,0x07,0x00,0x07,0x00, 0x14,0x7F,0x14,0x7F,0x14,
-  0x24,0x2A,0x7F,0x2A,0x12, 0x23,0x13,0x08,0x64,0x62, 0x36,0x49,0x55,0x22,0x50, 0x00,0x05,0x03,0x00,0x00,
-  0x00,0x1C,0x22,0x41,0x00, 0x00,0x41,0x22,0x1C,0x00, 0x14,0x08,0x3E,0x08,0x14, 0x08,0x08,0x3E,0x08,0x08,
-  0x00,0x50,0x30,0x00,0x00, 0x08,0x08,0x08,0x08,0x08, 0x00,0x60,0x60,0x00,0x00, 0x20,0x10,0x08,0x04,0x02,
-  0x3E,0x51,0x49,0x45,0x3E, 0x00,0x42,0x7F,0x40,0x00, 0x42,0x61,0x51,0x49,0x46, 0x21,0x41,0x45,0x4B,0x31,
-  0x18,0x14,0x12,0x7F,0x10, 0x27,0x45,0x45,0x45,0x39, 0x3C,0x4A,0x49,0x49,0x30, 0x01,0x71,0x09,0x05,0x03,
-  0x36,0x49,0x49,0x49,0x36, 0x06,0x49,0x49,0x29,0x1E, 0x00,0x36,0x36,0x00,0x00, 0x00,0x56,0x36,0x00,0x00,
-  0x08,0x14,0x22,0x41,0x00, 0x14,0x14,0x14,0x14,0x14, 0x00,0x41,0x22,0x14,0x08, 0x02,0x01,0x51,0x09,0x06,
-  0x32,0x49,0x79,0x41,0x3E, 0x7E,0x11,0x11,0x11,0x7E, 0x7F,0x49,0x49,0x49,0x36, 0x3E,0x41,0x41,0x41,0x22,
-  0x7F,0x41,0x41,0x22,0x1C, 0x7F,0x49,0x49,0x49,0x41, 0x7F,0x09,0x09,0x09,0x01, 0x3E,0x41,0x49,0x49,0x7A,
-  0x7F,0x08,0x08,0x08,0x7F, 0x00,0x41,0x7F,0x41,0x00, 0x20,0x40,0x41,0x3F,0x01, 0x7F,0x08,0x14,0x22,0x41,
-  0x7F,0x40,0x40,0x40,0x40, 0x7F,0x02,0x0C,0x02,0x7F, 0x7F,0x04,0x08,0x10,0x7F, 0x3E,0x41,0x41,0x41,0x3E,
-  0x7F,0x09,0x09,0x09,0x06, 0x3E,0x41,0x51,0x21,0x5E, 0x7F,0x09,0x19,0x29,0x46, 0x46,0x49,0x49,0x49,0x31,
-  0x01,0x01,0x7F,0x01,0x01, 0x3F,0x40,0x40,0x40,0x3F, 0x1F,0x20,0x40,0x20,0x1F, 0x7F,0x20,0x18,0x20,0x7F,
-  0x63,0x14,0x08,0x14,0x63, 0x07,0x08,0x70,0x08,0x07, 0x61,0x51,0x49,0x45,0x43
-];
-
-function drawText(text: string, x: i32, y: i32, color: u32, scale: i32): void {
-  let cx = x;
-  for (let i = 0; i < text.length; i++) {
-    let ch = text.charCodeAt(i);
-    if (ch >= 97 && ch <= 122) ch -= 32;
-    if (ch >= 32 && ch <= 90) {
-      let offset = (ch - 32) * 5;
-      for (let col = 0; col < 5; col++) {
-        let bits = FONT[offset + col];
-        for (let row = 0; row < 7; row++) {
-          if ((bits >> row) & 1) {
-            for (let sy = 0; sy < scale; sy++) {
-              for (let sx = 0; sx < scale; sx++) setPixel(cx + col * scale + sx, y + row * scale + sy, color);
-            }
-          }
-        }
-      }
-    }
-    cx += 6 * scale;
-  }
-}
-`;
-  CODE_SAMPLES.rtsp_player = `// =============================================================================
-// WASM ARCHITECT STUDIO - LIVE RTSP / H.264 HARDWARE CAMERA PLAYER
-// =============================================================================
-
-const WIDTH: i32 = 800;
-const HEIGHT: i32 = 600;
-export const pixels = new Uint32Array(WIDTH * HEIGHT);
-
-let rtsp = new RtspSession();
-let isPlaying: bool = false;
-let statusMsg: string = "STANDBY: CLICK CONNECT TO STREAM RTSP VIA PROXY";
-let mouseX: i32 = 0;
-let mouseY: i32 = 0;
-let frameCount: i32 = 0;
-
-export function getWidth(): i32 { return WIDTH; }
-export function getHeight(): i32 { return HEIGHT; }
-
-export function appInit(w: i32, h: i32, dpr: f64): void {
-  VideoDecoderEngine.init("avc1.42E01E"); // H.264 Baseline Profile
-}
-
-export function renderFrame(): i32 {
-  // Clear Background
-  pixels.fill(rgba(10, 13, 20));
-
-  // Top Bar & OSD
-  drawRect(20, 15, 760, 50, rgba(22, 27, 34));
-  drawText("RTSP HARDWARE DECODED LIVE STREAM", 35, 25, rgba(0, 243, 255), 2);
-  drawText(statusMsg, 35, 48, isPlaying ? rgba(0, 255, 157) : rgba(255, 180, 0), 1);
-
-  // Video Viewport Area (640x360 16:9 Aspect Ratio)
-  let vx: i32 = 20;
-  let vy: i32 = 75;
-  let vw: i32 = 640;
-  let vh: i32 = 360;
-
-  drawRect(vx, vy, vw, vh, rgba(5, 7, 10));
-  drawFrame(vx, vy, vw, vh, rgba(40, 50, 75));
-
-  if (isPlaying) {
-    // Blit hardware decoded RGBA frames directly into the WASM framebuffer
-    VideoDecoderEngine.drawFrame(pixels, WIDTH, HEIGHT, vx, vy, vw, vh);
-
-    // Live On-Screen Display (OSD) Overlay
-    drawRect(vx + 10, vy + 10, 110, 24, rgba(0, 0, 0, 180));
-    drawRect(vx + 15, vy + 18, 8, 8, rgba(255, 0, 0));
-    drawText("REC LIVE", vx + 30, vy + 18, rgba(255, 255, 255), 1);
-  } else {
-    drawText("NO ACTIVE VIDEO FEED", vx + 220, vy + 170, rgba(100, 115, 140), 2);
-  }
-
-  // Right Side Control Panel Card
-  let px: i32 = 670;
-  let py: i32 = 75;
-  drawRect(px, py, 110, 360, rgba(22, 27, 34));
-  drawFrame(px, py, 110, 360, rgba(40, 50, 75));
-
-  drawButton(px + 10, py + 15, 90, 35, "CONNECT", rgba(0, 180, 255));
-  drawButton(px + 10, py + 60, 90, 35, "PLAY", rgba(0, 255, 157));
-  drawButton(px + 10, py + 105, 90, 35, "STOP", rgba(255, 70, 70));
-
-  // Telemetry Section
-  drawRect(20, 445, 760, 130, rgba(16, 20, 28));
-  drawFrame(20, 445, 760, 130, rgba(40, 50, 75));
-  drawText("STREAM TELEMETRY & PROTOCOL LOGS", 35, 455, rgba(180, 200, 230), 1);
-  drawText("CODEC: H.264 / AVC1 HARDWARE ACCELERATED (GPU)", 35, 480, rgba(0, 243, 255), 1);
-  drawText("TRANSPORT: RTSP-over-TCP via WebSocket Gateway", 35, 500, rgba(130, 145, 175), 1);
-  drawText("FRAMES DECODED: " + frameCount.toString() + " | TIME: " + (now_ms() / 1000.0).toString().slice(0, 7) + "s", 35, 520, rgba(0, 255, 157), 1);
-
-  return <i32>pixels.dataStart;
-}
-
-export function mouseMove(x: i32, y: i32, buttons: i32, mods: i32): void {
-  mouseX = x;
-  mouseY = y;
-}
-
-export function mouseDown(button: i32, x: i32, y: i32, mods: i32): void {
-  // Connect
-  if (x >= 680 && x <= 770 && y >= 90 && y <= 125) {
-    statusMsg = "CONNECTING TO RTSP WS PROXY (ws://localhost:8554)...";
-    rtsp.connect("ws://localhost:8554", "rtsp://camera.local:554/live");
-  }
-
-  // Play
-  //if (x >= 680 && x <= 770 && y >= 135 && y <= 170) {
-  //  statusMsg = "STREAMING: RTSP/H.264 640x360 30FPS";
-  //  rtsp.sendPlay();
-  //  isPlaying = true;
-  //}
-
-  // Stop
-  //if (x >= 680 && x <= 770 && y >= 180 && y <= 215) {
-  //  statusMsg = "STREAM STOPPED";
-  //  isPlaying = false;
-  //}
-  if (x >= px + 15 && x <= px + 195 && y >= py + 162 && y <= py + 196) {
-    if (!isStreaming) {
-      statusMessage = "CONNECTING ULTRA-LOW-LATENCY WHEP...";
-
-      let uBuf = String.UTF8.encode(currentStreamUrl);
-      activeWsId = host_ws_connect(
-        changetype<usize>(uBuf),
-        uBuf.byteLength
-      );
-
-      if (activeWsId >= 0) {
-        isStreaming = true;
-      } else {
-        isStreaming = false;
-        statusMessage = "WHEP CONNECTION FAILED";
-      }
-    } else {
-      if (activeWsId >= 0) {
-        host_ws_close(activeWsId);
-        activeWsId = -1;
-      }
-
-      isStreaming = false;
-      statusMessage = "LIVE STREAM STOPPED";
-    }
-  }
-}
-
-export function appStop(): void {
-  if (activeWsId >= 0) {
-    host_ws_close(activeWsId);
-    activeWsId = -1;
-  }
-
-  isStreaming = false;
-}
-
-// Callback invoked by WebCodecs whenever a hardware frame is decoded
-export function videoFrameDecoded(w: i32, h: i32): void {
-  frameCount++;
-}
-
-function drawButton(x: i32, y: i32, w: i32, h: i32, label: string, color: u32): void {
-  let isHover = mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h;
-  let bg = isHover ? color : rgba(32, 40, 58);
-  drawRect(x, y, w, h, bg);
-  drawRect(x, y, w, 2, rgba(0, 243, 255));
-  drawText(label, x + 10, y + 12, rgba(255, 255, 255), 1);
-}
-`;
-  if (CODE_SAMPLES.game_of_life && !CODE_SAMPLES.game_of_life.includes('getWidth')) {
-    CODE_SAMPLES.game_of_life += `\nexport function getWidth(): i32 { return WIDTH * 4; }\nexport function getHeight(): i32 { return HEIGHT * 4; }\n`;
-  }
-  const select = document.getElementById('sampleSelect');
-  select.value = 'bouncing_balls';
-  select.addEventListener('change', e => {
-    const key = e.target.value;
-    const code = CODE_SAMPLES[key];
-    if (!code) return;
-    const name = `${key.replaceAll('_','-')}.ts`;
-    const existing = fileTabs.find(t => t.name === name && t.kind === 'source');
-    if (existing) switchTab(existing.id); else createNewTab(name, code);
   });
 
   window.addEventListener('keydown', e => {

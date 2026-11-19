@@ -1,0 +1,11 @@
+{
+  "id": "wasmos.system.terminal",
+  "name": "Terminal",
+  "version": "1.0.0",
+  "format": "panel",
+  "capabilities": [
+    "graph",
+    "files"
+  ],
+  "services": []
+}

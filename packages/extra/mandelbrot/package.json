@@ -1,0 +1,8 @@
+{
+  "id": "wasmos.extra.mandelbrot",
+  "name": "Mandelbrot",
+  "version": "1.0.0",
+  "format": "assemblyscript",
+  "capabilities": [],
+  "services": []
+}

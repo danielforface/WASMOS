@@ -1,0 +1,8 @@
+{
+  "id": "wasmos.extra.inference",
+  "name": "Local GGUF Inference Service",
+  "version": "1.0.0",
+  "format": "assemblyscript",
+  "capabilities": [],
+  "services": []
+}

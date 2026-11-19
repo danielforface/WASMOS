@@ -1,0 +1,3 @@
+<h1>Audio Recorder</h1><p>Start recording with the control in the window header. Stop to play your recording here.</p><audio controls></audio><p id="result"></p><script>
+let previous='';addEventListener('package-media',e=>{if(e.detail.type!=='audio')return;if(previous)URL.revokeObjectURL(previous);previous=URL.createObjectURL(e.detail.blob);document.querySelector('audio').src=previous;document.getElementById('result').textContent='Recorded '+e.detail.blob.size+' bytes.';});
+</script>

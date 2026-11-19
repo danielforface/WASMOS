@@ -1,0 +1,18 @@
+{
+  "id": "wasmos.system.clock",
+  "name": "Clock",
+  "version": "1.0.0",
+  "format": "panel",
+  "capabilities": [
+    "service"
+  ],
+  "services": [
+    {
+      "name": "os.time",
+      "version": "1.0.0",
+      "methods": [
+        "now"
+      ]
+    }
+  ]
+}

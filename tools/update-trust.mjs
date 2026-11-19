@@ -30,7 +30,7 @@ if(roots.some(x=>denied.has(x.k))||roots.length<80||incidentList.length!==16)thr
 const json=(p,x)=>write(p,JSON.stringify(x,null,2)+'\n');
 json('trust/roots.json',roots.map(x=>x.b.toString('base64')));
 json('trust/blocked-spki.json',[...denied].sort());
-const browser='apps/browser/main.ts',src=read(browser,'utf8'),marker=/^const BLOCKED_SPKI_HEX:string\[\]=\[.*\];$/gm;
+const browser='packages/base/browser/main.ts',src=read(browser,'utf8'),marker=/^const BLOCKED_SPKI_HEX:string\[\]=\[.*\];$/gm;
 if([...src.matchAll(marker)].length!==1)throw Error('Missing or duplicate browser policy declaration');
 write(browser,src.replace(marker,()=> 'const BLOCKED_SPKI_HEX:string[]='+JSON.stringify([...denied].sort())+';'));
 console.log(legacy.length+' legacy roots -> '+roots.length+' unconstrained TLS roots; '+denied.size+' blocked SPKIs');

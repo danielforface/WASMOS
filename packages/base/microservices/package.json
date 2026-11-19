@@ -1,0 +1,11 @@
+{
+  "id": "wasmos.system.microservices",
+  "name": "Microservices",
+  "version": "1.0.0",
+  "format": "panel",
+  "capabilities": [
+    "graph",
+    "manage"
+  ],
+  "services": []
+}

@@ -1,0 +1,10 @@
+{
+  "id": "wasmos.system.services",
+  "name": "Service Graph",
+  "version": "1.0.0",
+  "format": "panel",
+  "capabilities": [
+    "graph"
+  ],
+  "services": []
+}

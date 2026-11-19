@@ -19,7 +19,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
-    <Content Include="..\..\dist\**\*" Link="www\%(RecursiveDir)%(Filename)%(Extension)">
+    <Content Include="..\..\dist\shell\**\*" Link="www\%(RecursiveDir)%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

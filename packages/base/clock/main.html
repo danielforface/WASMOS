@@ -1,0 +1,8 @@
+<h1>Clock</h1><time id="now"></time><p id="date"></p><section><button id="start">Start / pause stopwatch</button><button id="reset">Reset</button><output id="elapsed"></output></section>
+<label>Timer (seconds) <input id="seconds" type="number" min="1" max="86400" value="60"></label><button id="timer">Set timer</button><output id="left"></output>
+<script>
+const by=id=>document.getElementById(id);let start=0,elapsed=0,until=0;
+by('start').onclick=()=>{if(start){elapsed+=performance.now()-start;start=0;}else start=performance.now();};by('reset').onclick=()=>{start=elapsed=0;};by('timer').onclick=()=>{const s=Number(by('seconds').value);if(s>=1&&s<=86400)until=Date.now()+s*1000;};
+function tick(){const d=new Date();by('now').textContent=d.toLocaleTimeString();by('date').textContent=d.toLocaleDateString(undefined,{dateStyle:'full'});by('elapsed').textContent=((elapsed+(start?performance.now()-start:0))/1000).toFixed(1)+' s';if(until)by('left').textContent=until>Date.now()?Math.ceil((until-Date.now())/1000)+' s':'Time is up';}tick();setInterval(tick,100);
+wasmos.provide('os.time',()=>({ok:true,epochMs:Date.now(),iso:new Date().toISOString(),timezone:Intl.DateTimeFormat().resolvedOptions().timeZone}));
+</script>

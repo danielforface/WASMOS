@@ -1,0 +1,15 @@
+<h1>Calculator</h1><form id="form"><label>Expression <input id="expr" placeholder="(12+3)*4 / 2" maxlength="512" required></label><button>Calculate</button></form><output id="answer"></output>
+<script>
+function calculate(input){
+ const s=String(input??'').replace(/\s+/g,'');if(!s.length||s.length>512)throw Error('Enter 1–512 characters');let i=0;
+ function atom(){if(s[i]==='('){i++;const n=sum();if(s[i++]!==')')throw Error('Missing closing parenthesis');return n;}
+ const match=s.slice(i).match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?/);if(!match)throw Error('Expected number');i+=match[0].length;return Number(match[0]);}
+ function pow(){const n=atom();if(s[i]==='^'){i++;return n**signed();}return n;}
+ function signed(){if(s[i]==='-'){i++;return -signed();}if(s[i]==='+'){i++;return signed();}return pow();}
+ function product(){let n=signed();while(i<s.length&&'*/%'.includes(s[i])){const op=s[i++],b=signed();n=op==='*'?n*b:op==='/'?n/b:n%b;}return n;}
+ function sum(){let n=product();while(i<s.length&&'+-'.includes(s[i])){const op=s[i++],b=product();n=op==='+'?n+b:n-b;}return n;}
+ const n=sum();if(i!==s.length||!Number.isFinite(n))throw Error('Invalid or non-finite result');return n;
+}
+document.querySelector('form').onsubmit=e=>{e.preventDefault();const o=document.querySelector('output');try{o.textContent=calculate(document.querySelector('input').value);}catch(e){o.textContent=e.message;}};
+wasmos.provide('os.math',(method,v)=>({ok:true,result:calculate(v.expression)}));
+</script>

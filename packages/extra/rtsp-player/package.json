@@ -1,0 +1,8 @@
+{
+  "id": "wasmos.extra.rtsp-player",
+  "name": "Live Camera / WHEP Player",
+  "version": "1.0.0",
+  "format": "assemblyscript",
+  "capabilities": [],
+  "services": []
+}

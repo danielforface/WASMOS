@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "identifier": "com.wasmos.studio",
   "build": {
-    "frontendDist": "../dist"
+    "frontendDist": "../dist/shell"
   },
   "app": {
     "withGlobalTauri": true,

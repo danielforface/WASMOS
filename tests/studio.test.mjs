@@ -16,21 +16,21 @@ test('only a complete generated prelude at the start is replaced',()=>{
  assert.throws(()=>stripAutoSdk(old.split('\r\n')[0]+'\n'+old+app),/Malformed/);
  assert.equal(withSdk(old+app,'fresh'),'fresh\n'+app);
 });
-const html=await text('dist/index.html'),raw=await text('apps/browser/main.ts'),exp=await text('dist/apps/browser.ts');
-test('Host, CLI and browser launcher use the identical SDK and application',()=>{
+const html=await text('dist/shell/index.html'),raw=await text('packages/base/browser/main.ts'),exp=await text('build/apps/browser.ts');
+test('shell, CLI and imported packages use the same SDK; no browser capsule ships in the shell',()=>{
  const literal=html.match(/^const WASM_ARCHITECT_STDLIB = (".*");$/m);assert.ok(literal);
  const sdk=JSON.parse(literal[1]);
  assert.equal(withSdk(raw,sdk),exp);assert.equal(stripAutoSdk(exp).trimStart(),raw);
- assert.equal(Buffer.from(html.match(/OS_SYSTEM_BROWSER_SOURCE_B64 = '([^']+)'/)[1],'base64').toString(),raw);
+ assert.doesNotMatch(html,/OS_SYSTEM_BROWSER_SOURCE_B64|OS_BUILTIN_APPS|OS_CORE_SERVICES|CODE_SAMPLES/);
  assert.match(html,/source = withSdk\(source, WASM_ARCHITECT_STDLIB\)/);
  assert.match(html,/const exportCode = withSdk\(tab.content, WASM_ARCHITECT_STDLIB\)/);
  assert.match(html,/text = stripAutoSdk\(text\)/);
 });
 test('all catalog apps are valid Wasm with only declared host calls',async()=>{
  const abi=JSON.parse(await text('sdk/host-abi.json')),names=new Set(abi.map(x=>x.name));assert.equal(names.size,abi.length);
- for(const {id} of JSON.parse(await text('apps/catalog.json'))){
-  const binary=await readFile('dist/apps/'+id+'.wasm');assert.ok(WebAssembly.validate(binary),id);
-  for(const imp of WebAssembly.Module.imports(new WebAssembly.Module(binary)))assert.ok(imp.module==='host'?names.has(imp.name):imp.module==='env'&&imp.name==='abort',id+': '+imp.module+'.'+imp.name);
+ for(const {slug:id,format,path} of JSON.parse(await text('packages/catalog.json')).packages.filter(p=>p.format!=='panel')){
+  const binary=await readFile(format==='wasm'?path:'build/apps/'+id+'.wasm');assert.ok(WebAssembly.validate(binary),id);
+  for(const imp of WebAssembly.Module.imports(new WebAssembly.Module(binary)))assert.ok(imp.module==='host'?names.has(imp.name):imp.module==='env'&&['abort','seed'].includes(imp.name),id+': '+imp.module+'.'+imp.name);
  }
 });
 test('the conservative trust snapshot is internally consistent',async()=>{

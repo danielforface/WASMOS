@@ -1,4 +1,4 @@
-module.exports = { content: ['./host/studio.template.html'], ...{
+module.exports = { content: ['./host/studio.template.html','./host/package-*.js'], ...{
             darkMode: 'class',
             theme: {
                 extend: {

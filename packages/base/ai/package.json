@@ -1,0 +1,19 @@
+{
+  "id": "wasmos.system.ai",
+  "name": "AI Engine",
+  "version": "1.0.0",
+  "format": "panel",
+  "capabilities": [
+    "graph",
+    "service"
+  ],
+  "services": [
+    {
+      "name": "os.ai.registry",
+      "version": "1.0.0",
+      "methods": [
+        "providers"
+      ]
+    }
+  ]
+}

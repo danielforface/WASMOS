@@ -13,14 +13,14 @@ npm test
 npm run serve
 ```
 
-Open **http://127.0.0.1:4173**. Launch the built-in Browser in the Studio, or import a standalone source from **dist/apps/**. **dist/index.html and dist/vendor/ must stay together.** In a normal web browser the Studio cannot create arbitrary raw sockets. For direct browsing, use `npm run desktop` after building dist/. Use `npm run desktop:build` to package the native application. The target WebView determines HTML/CSS/JS implementation; this is not a bundled copy of Chrome.
+Open **http://127.0.0.1:4173**. A clean desktop knows no application IDs. Choose **טעינת יישומי הבסיס מהריפו** for the complete official base, or **התקנת יישומים נוספים** to choose individual extras. Installed apps survive restart and can launch offline. For direct packet networking use `npm run desktop`; `npm run desktop:build` packages the native app. The desktop shells ship **only `dist/shell/`**, never the developer outputs in `build/apps/`. To build just the OS without any application files: `npm run build:shell`. The renderer is the target WebView, not a bundled copy of Chrome.
 
 ## What is here
 
 | Area | Source / verification |
 | --- | --- |
 | Studio, SDK, desktop | host/, sdk/, src-tauri/; compiler and UI assets bundled locally |
-| Six Studio apps + NEBULA | [Catalog / recovered projects](docs/inventory.md); see apps/catalog.json |
+| Official base and optional packages | [Installation and authoring](docs/packages.md) · [live catalog](packages/catalog.json) · [recovered sources](docs/inventory.md) |
 | Browser TLS trust | trust/; pinned NSS data, a conservative set of TLS anchors and blocked intermediate public keys |
 | Packet-owned WebTransport / WebRTC engine | [Transport profile and integration boundary](transport/README.md); `npm run transport:test` |
 
@@ -28,4 +28,4 @@ Open **http://127.0.0.1:4173**. Launch the built-in Browser in the Studio, or im
 
 ## הפעלה בקצרה
 
-אחרי הבנייה, הפעלת `npm run desktop` פותחת את ה־Studio בסביבת Tauri. את הדפדפן אפשר להפעיל מתפריט המערכת או לייבא את `dist/apps/browser.ts`. זה הקובץ שמיועד לייבוא: הוא כולל את ה־SDK העדכני. אין צורך להעתיק ידנית שורות לתוך OsService.
+אחרי `npm ci` ו־`npm run build:shell`, מריצים `npm run desktop`. בהתקנה חדשה לוחצים על **טעינת יישומי הבסיס מהריפו**, ואז על **Browser**. יישומים נוספים מותקנים רק לפי בחירה. לייבוא ידני למטרות פיתוח, `npm run build` מייצר בין היתר את `build/apps/browser.ts` עם ה־SDK העדכני.

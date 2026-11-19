@@ -1,0 +1,8 @@
+{
+  "id": "wasmos.extra.http-client",
+  "name": "HTTP Network Dashboard",
+  "version": "1.0.0",
+  "format": "assemblyscript",
+  "capabilities": [],
+  "services": []
+}

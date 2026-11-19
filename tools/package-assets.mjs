@@ -1,0 +1,11 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import binaryen from 'binaryen';
+process.chdir(fileURLToPath(new URL('..',import.meta.url)));
+const fib='packages/extra/fibonacci/main',mod=binaryen.parseText(await readFile(fib+'.wat','utf8'));
+if(!mod.validate())throw Error('Invalid WAT');await writeFile(fib+'.wasm',mod.emitBinary());mod.dispose();
+const dir='packages/extra/nebula/project/dist',html=await readFile(dir+'/index.html','utf8');
+const asset=async re=>{const match=html.match(re);if(!match)throw Error('Missing built NEBULA asset');return readFile(dir+match[1],'utf8');};
+const css=await asset(/href="(\/assets\/[^"]+\.css)"/),js=await asset(/src="(\/assets\/[^"]+\.js)"/);
+const wasm=await readFile(dir+'/vfs.wasm');
+await writeFile('packages/extra/nebula/main.html','<style>'+css+'</style><div id="app"></div><script type="application/octet-stream" id="vfs-module">'+wasm.toString('base64')+'</script><script type="module">'+js.replace(/<\/script/gi,'<\\/script')+'</script>\n');
