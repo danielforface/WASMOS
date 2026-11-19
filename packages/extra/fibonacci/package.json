@@ -1,0 +1,8 @@
+{
+  "id": "wasmos.extra.fibonacci",
+  "name": "Fibonacci benchmark",
+  "version": "1.0.0",
+  "format": "wasm",
+  "capabilities": [],
+  "services": []
+}

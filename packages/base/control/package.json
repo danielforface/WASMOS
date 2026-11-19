@@ -1,0 +1,10 @@
+{
+  "id": "wasmos.system.control",
+  "name": "OS Control Center",
+  "version": "1.0.0",
+  "format": "panel",
+  "capabilities": [
+    "graph"
+  ],
+  "services": []
+}

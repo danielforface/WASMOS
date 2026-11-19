@@ -1,0 +1,10 @@
+{
+  "id": "wasmos.system.files",
+  "name": "Files",
+  "version": "1.0.0",
+  "format": "panel",
+  "capabilities": [
+    "files"
+  ],
+  "services": []
+}

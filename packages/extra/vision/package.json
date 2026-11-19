@@ -1,0 +1,8 @@
+{
+  "id": "wasmos.extra.vision",
+  "name": "Dual-box WHEP Vision",
+  "version": "1.0.0",
+  "format": "assemblyscript",
+  "capabilities": [],
+  "services": []
+}

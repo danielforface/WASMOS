@@ -1,0 +1,4 @@
+<h1>Diagnostic Terminal</h1><p>Commands: help, apps, services, graph, files, clear</p><form><input aria-label="Command" autocomplete="off"><button>Run</button></form><pre aria-live="polite"></pre><script>
+document.querySelector('form').onsubmit=async e=>{e.preventDefault();const i=document.querySelector('input'),o=document.querySelector('pre'),cmd=i.value.trim();i.value='';if(cmd==='clear'){o.textContent='';return;}try{let reply;
+if(cmd==='help')reply='help, apps, services, graph, files, clear';else if(cmd==='files')reply=await wasmos.call('files');else if(['apps','services','graph'].includes(cmd)){const g=await wasmos.call('graph');reply=cmd==='graph'?g:g[cmd];}else reply='Unknown command';o.textContent=(o.textContent+'\n> '+cmd+'\n'+(typeof reply==='string'?reply:JSON.stringify(reply,null,2))).slice(-48000);}catch(x){o.textContent+='\n'+x.message;}};
+</script>

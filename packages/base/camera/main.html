@@ -1,0 +1,4 @@
+<h1>Camera</h1><p>Start the camera using the control in the window header. Stop it there or close this window.</p><button disabled>Freeze snapshot</button><p><img alt="Camera preview"></p><script>
+const view=document.querySelector('img'),button=document.querySelector('button');let previous='',frozen=false;button.onclick=()=>{frozen=!frozen;button.textContent=frozen?'Resume preview':'Freeze snapshot';};
+addEventListener('package-media',e=>{if(e.detail.type!=='frame'||frozen)return;const url=URL.createObjectURL(e.detail.blob);view.src=url;if(previous)URL.revokeObjectURL(previous);previous=url;button.disabled=false;});
+</script>

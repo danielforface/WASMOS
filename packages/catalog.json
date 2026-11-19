@@ -1,0 +1,353 @@
+{
+  "schema": "wasmos.packages/1",
+  "packages": [
+    {
+      "id": "wasmos.system.ai",
+      "name": "AI Engine",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "ai",
+      "path": "packages/base/ai/main.html",
+      "bytes": 664,
+      "sha256": "53c407563947f808050a9105a7fb60295b68be8dcccf486a299f5b35c6cc8998",
+      "capabilities": [
+        "graph",
+        "service"
+      ],
+      "services": [
+        {
+          "name": "os.ai.registry",
+          "version": "1.0.0",
+          "methods": [
+            "providers"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wasmos.system.browser",
+      "name": "Browser",
+      "version": "6.0.0",
+      "format": "assemblyscript",
+      "group": "base",
+      "slug": "browser",
+      "path": "packages/base/browser/main.ts",
+      "bytes": 239132,
+      "sha256": "47186719b456d89634aa59bf4d671688b997f826c5162d8757372cf091ec81d7",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.system.calculator",
+      "name": "Calculator",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "calculator",
+      "path": "packages/base/calculator/main.html",
+      "bytes": 1505,
+      "sha256": "5e6a97ea0cd7702c9b6549b1ce30b2e118f531ca762afc824a45a32d99c22ab1",
+      "capabilities": [
+        "service"
+      ],
+      "services": [
+        {
+          "name": "os.math",
+          "version": "1.0.0",
+          "methods": [
+            "calculate"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wasmos.system.camera",
+      "name": "Camera",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "camera",
+      "path": "packages/base/camera/main.html",
+      "bytes": 634,
+      "sha256": "aeac1b0841da1e3824761aa6f4331037a81473c9eba67f9e9d474543d56fdc80",
+      "capabilities": [
+        "camera"
+      ],
+      "services": []
+    },
+    {
+      "id": "wasmos.system.clock",
+      "name": "Clock",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "clock",
+      "path": "packages/base/clock/main.html",
+      "bytes": 1225,
+      "sha256": "b66ea15b5cb7b1dc369a22037a7de70684ad9dd7208a6a3092be6ea0e7499ebd",
+      "capabilities": [
+        "service"
+      ],
+      "services": [
+        {
+          "name": "os.time",
+          "version": "1.0.0",
+          "methods": [
+            "now"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wasmos.system.control",
+      "name": "OS Control Center",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "control",
+      "path": "packages/base/control/main.html",
+      "bytes": 528,
+      "sha256": "e479fb180cc97a01f1a8fa7d7eebbcc1e15eb88c94db1542f4dc5694551b1e6b",
+      "capabilities": [
+        "graph"
+      ],
+      "services": []
+    },
+    {
+      "id": "wasmos.system.files",
+      "name": "Files",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "files",
+      "path": "packages/base/files/main.html",
+      "bytes": 669,
+      "sha256": "5def0ee7c24af2c2f68c692c7d23b73e0493bcf5134b39ad40721a4df7057974",
+      "capabilities": [
+        "files"
+      ],
+      "services": []
+    },
+    {
+      "id": "wasmos.system.microservices",
+      "name": "Microservices",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "microservices",
+      "path": "packages/base/microservices/main.html",
+      "bytes": 1157,
+      "sha256": "bbc7bc44dca962be979686259c3b1d82e9b82480be93194d81e8911cbdf86fd2",
+      "capabilities": [
+        "graph",
+        "manage"
+      ],
+      "services": []
+    },
+    {
+      "id": "wasmos.system.recorder",
+      "name": "Recorder",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "recorder",
+      "path": "packages/base/recorder/main.html",
+      "bytes": 489,
+      "sha256": "685a83796febff213e248862b9776006ef35013894b8e9c8a36ea96df0969649",
+      "capabilities": [
+        "microphone"
+      ],
+      "services": []
+    },
+    {
+      "id": "wasmos.system.services",
+      "name": "Service Graph",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "services",
+      "path": "packages/base/services/main.html",
+      "bytes": 594,
+      "sha256": "5219baa1286be6deaa83e363097025a736bf1effb2f162eedf3db6243faf9d15",
+      "capabilities": [
+        "graph"
+      ],
+      "services": []
+    },
+    {
+      "id": "wasmos.system.terminal",
+      "name": "Terminal",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "base",
+      "slug": "terminal",
+      "path": "packages/base/terminal/main.html",
+      "bytes": 875,
+      "sha256": "6681c5fb1bae39e0afc31bfa3819b6616f2eb3c6b72916d04dd7f7ceaf0cbc9d",
+      "capabilities": [
+        "graph",
+        "files"
+      ],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.bouncing-balls",
+      "name": "Bouncing Balls",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "bouncing-balls",
+      "path": "packages/extra/bouncing-balls/main.ts",
+      "bytes": 2303,
+      "sha256": "838d96bcafd5172b6012c0ffc90d17d06e0b0f21730c91cd92f1f5210150de18",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.fibonacci",
+      "name": "Fibonacci benchmark",
+      "version": "1.0.0",
+      "format": "wasm",
+      "group": "extra",
+      "slug": "fibonacci",
+      "path": "packages/extra/fibonacci/main.wasm",
+      "bytes": 107,
+      "sha256": "2a7ce855712cf4a5cd18f6d91934ee68e1f4898e4068e178a0696383d93f7d95",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.fly",
+      "name": "Fly Embodied Autonomy",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "fly",
+      "path": "packages/extra/fly/main.ts",
+      "bytes": 80600,
+      "sha256": "b2a9980a56583e2be2b0875b8d8417c36817090c29115bfc64178d471111d67a",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.game-of-life",
+      "name": "Conway’s Game of Life",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "game-of-life",
+      "path": "packages/extra/game-of-life/main.ts",
+      "bytes": 2172,
+      "sha256": "fa6ea3f732ece72f855a7ed4575105f031a1e5b6bb80cd0874c64f9520cf1e29",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.http-client",
+      "name": "HTTP Network Dashboard",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "http-client",
+      "path": "packages/extra/http-client/main.ts",
+      "bytes": 3885,
+      "sha256": "602a5fb424b4321f9888c72e3f968ae601e3c70a3587861e7b5f36d3f7c0540b",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.inference",
+      "name": "Local GGUF Inference Service",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "inference",
+      "path": "packages/extra/inference/main.ts",
+      "bytes": 151222,
+      "sha256": "a5712400f24b43c4d84345cd417f7ab7c3986642374cd6d54f0ba10e49ea98e7",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.mandelbrot",
+      "name": "Mandelbrot",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "mandelbrot",
+      "path": "packages/extra/mandelbrot/main.ts",
+      "bytes": 1327,
+      "sha256": "19b1508d6732ecb91ff9502d6c504d6e66631791944b7d3f57ee4f5d042c4822",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.media",
+      "name": "Internet Media & Telemetry Dashboard",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "media",
+      "path": "packages/extra/media/main.ts",
+      "bytes": 11835,
+      "sha256": "c4ab66ef903f7e8ceb197cf7b10de6faa964f0fc06403957048c4c56873dfa7a",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.nebula",
+      "name": "NEBULA Virtual Desktop",
+      "version": "1.0.0",
+      "format": "panel",
+      "group": "extra",
+      "slug": "nebula",
+      "path": "packages/extra/nebula/main.html",
+      "bytes": 115848,
+      "sha256": "6bfc7c972b85e1fb10cee0d3b4f93e8d7fb4000b8a65a6e0617d71b0e51e5a63",
+      "capabilities": [
+        "wasm"
+      ],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.rtsp",
+      "name": "Packet-owned RTSP controller",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "rtsp",
+      "path": "packages/extra/rtsp/main.ts",
+      "bytes": 45711,
+      "sha256": "733177bd4bd3a62babf93ba5f5e86eaf1e4b3c82c69b7cff1317b166896dc1c4",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.rtsp-player",
+      "name": "Live Camera / WHEP Player",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "rtsp-player",
+      "path": "packages/extra/rtsp-player/main.ts",
+      "bytes": 4109,
+      "sha256": "4ecdd32d3ba604acc0c7f4a72ef8a8f676a8dd3ae70c9f09565c3fc4cc3b2ddc",
+      "capabilities": [],
+      "services": []
+    },
+    {
+      "id": "wasmos.extra.vision",
+      "name": "Dual-box WHEP Vision",
+      "version": "1.0.0",
+      "format": "assemblyscript",
+      "group": "extra",
+      "slug": "vision",
+      "path": "packages/extra/vision/main.ts",
+      "bytes": 54609,
+      "sha256": "3aa688f39ddae790016fd107c6c4d32943b6d8b90367a25954569207a9e8eee9",
+      "capabilities": [],
+      "services": []
+    }
+  ]
+}

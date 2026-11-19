@@ -1,0 +1,4 @@
+<h1>Shared Files</h1><p>Read-only listing of the shared filesystem. Private app files are not exposed.</p><label>Filter <input id="filter" placeholder="/shared/"></label><button>Refresh</button><pre></pre><script>
+async function show(){try{const all=await wasmos.call('files'),query=document.querySelector('input').value;const items=all.filter(x=>x.path.includes(query));document.querySelector('pre').textContent=items.map(x=>x.kind+'  '+x.path+'  '+x.bytes+' B').join('\n')||'No shared files.';}catch(e){document.querySelector('pre').textContent=e.message;}}
+document.querySelector('button').onclick=show;document.querySelector('input').oninput=show;show();
+</script>

@@ -1,0 +1,24 @@
+{
+  "targets": {
+    "release": {
+      "outFile": "public/vfs.wasm",
+      "textFile": "public/vfs.wat",
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 1,
+      "converge": true,
+      "noAssert": true,
+      "exportRuntime": true
+    },
+    "debug": {
+      "outFile": "public/vfs.debug.wasm",
+      "textFile": "public/vfs.debug.wat",
+      "sourceMap": true,
+      "debug": true,
+      "exportRuntime": true
+    }
+  },
+  "options": {
+    "bindings": "raw"
+  }
+}

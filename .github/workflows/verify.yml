@@ -1,0 +1,54 @@
+name: Verify portable OS
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  desktop-catalog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - run: node hosts/webview2/tests/bridge-test.js
+      - name: Real Chromium install, launch, restart, removal and compilation
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: npm run test:studio
+  wasm-protocols:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: transport/go.mod
+          cache-dependency-path: transport/go.sum
+      - run: npm ci
+      - run: npm run transport:test
+      - name: Exchange RTC packets between two real Chromium Web Workers
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: node tools/transport-chrome.mjs
+  native-host:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run build:shell
+      - run: cargo test --locked --manifest-path src-tauri/Cargo.toml

@@ -1,0 +1,8 @@
+{
+  "id": "wasmos.extra.rtsp",
+  "name": "Packet-owned RTSP controller",
+  "version": "1.0.0",
+  "format": "assemblyscript",
+  "capabilities": [],
+  "services": []
+}

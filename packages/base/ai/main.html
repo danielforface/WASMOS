@@ -1,0 +1,5 @@
+<h1>AI provider registry</h1><p>Live inference providers published by installed applications.</p><pre></pre><script>
+async function providers(){return (await wasmos.call('graph')).services.filter(s=>s.name==='ai.inference.generate').map(s=>({id:s.id,version:s.version,app:s.provider,load:s.load}));}
+async function refresh(){try{const ps=await providers();document.querySelector('pre').textContent=ps.length?JSON.stringify(ps,null,2):'No inference provider is running.';}catch(e){document.querySelector('pre').textContent=e.message;}}
+wasmos.provide('os.ai.registry',async()=>({ok:true,providers:await providers()}));refresh();setInterval(refresh,2500);
+</script>

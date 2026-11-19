@@ -1,0 +1,13 @@
+{
+  "nss": {
+    "tag": "NSS_3_133_RTM",
+    "url": "https://raw.githubusercontent.com/mozilla/nss/NSS_3_133_RTM/lib/ckfw/builtins/certdata.txt",
+    "sha256": "3EC2B4D240DC12C747EAF450061DB84AF757C483BBDA302F9E29CEB5D70BE510"
+  },
+  "incident": {
+    "source": "https://bugzilla.mozilla.org/show_bug.cgi?id=2083449",
+    "url": "https://groups.google.com/a/mozilla.org/group/dev-security-policy/attach/ebe6751f7ad1/impacted-intermediates.json?part=0.1",
+    "sha256": "F67B3ABE9B4879F4E91874ED041BECCD71257F1DB41C588C724CCF12AA90C59E"
+  },
+  "profile": "Intersection with the 2026-08-28 app roots. All distrust-after roots are conservatively excluded, even for older leaves; incident intermediate SPKIs are blocked on every path. Not a Firefox policy clone."
+}

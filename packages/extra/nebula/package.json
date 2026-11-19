@@ -1,0 +1,10 @@
+{
+  "id": "wasmos.extra.nebula",
+  "name": "NEBULA Virtual Desktop",
+  "version": "1.0.0",
+  "format": "panel",
+  "capabilities": [
+    "wasm"
+  ],
+  "services": []
+}

@@ -1,0 +1,10 @@
+{
+  "id": "wasmos.system.camera",
+  "name": "Camera",
+  "version": "1.0.0",
+  "format": "panel",
+  "capabilities": [
+    "camera"
+  ],
+  "services": []
+}
